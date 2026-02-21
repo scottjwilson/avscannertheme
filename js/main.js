@@ -1,3 +1,10 @@
+import "../css/variables.css";
+import "../css/base.css";
+import "../css/layout.css";
+import "../css/header.css";
+import "../css/footer.css";
+import "../css/front-page.css";
+
 /**
  * Clean Vite WP
  * Main JavaScript

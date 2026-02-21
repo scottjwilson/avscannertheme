@@ -77,15 +77,21 @@ function cvw_enqueue_assets(): void
         CVW_VERSION,
     );
     wp_enqueue_style(
+        "cvw-layout",
+        get_template_directory_uri() . "/css/layout.css",
+        ["cvw-base"],
+        CVW_VERSION,
+    );
+    wp_enqueue_style(
         "cvw-header",
         get_template_directory_uri() . "/css/header.css",
-        ["cvw-base"],
+        ["cvw-base", "cvw-layout"],
         CVW_VERSION,
     );
     wp_enqueue_style(
         "cvw-footer",
         get_template_directory_uri() . "/css/footer.css",
-        ["cvw-base"],
+        ["cvw-base", "cvw-layout"],
         CVW_VERSION,
     );
 
