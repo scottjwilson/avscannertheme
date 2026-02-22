@@ -1,44 +1,8 @@
 /*
- * Clean Vite WP
- * Front Page Styles
+ * AV Scanner Theme
+ * Front Page — top spacing for the posts grid
  */
 
-/* ========================================
-   HERO SECTION
-   ======================================== */
-
-.hero {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 8rem 0 4rem;
-}
-
-.hero-content {
-    max-width: 800px;
-}
-
-.hero .text-hero {
-    margin-bottom: var(--space-6);
-}
-
-.hero-subtitle {
-    font-size: var(--text-xl);
-    line-height: var(--leading-relaxed);
-    color: var(--color-neutral-600);
-    max-width: 600px;
-    margin-bottom: var(--space-8);
-}
-
-.hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-}
-
-@media (min-width: 768px) {
-    .hero {
-        padding: 10rem 0 6rem;
-    }
+.is-front-page .section:first-of-type {
+    padding-top: calc(var(--space-16) + 4px);
 }

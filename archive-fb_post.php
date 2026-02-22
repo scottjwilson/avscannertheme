@@ -52,13 +52,13 @@ get_header(); ?>
                         <?php endif; ?>
 
                         <span class="card-date">
-                            <?php echo get_the_date("M j, Y"); ?>
+                            <?php echo get_the_date("M j, Y"); ?> at <?php echo get_the_time("g:i A"); ?>
                         </span>
 
                         <?php if ($post_cats && !is_wp_error($post_cats)): ?>
                             <div class="card-badges">
                                 <?php foreach ($post_cats as $cat): ?>
-                                    <a href="<?php echo esc_url(get_term_link($cat)); ?>" class="badge">
+                                    <a href="<?php echo esc_url(get_term_link($cat)); ?>" class="badge badge-<?php echo esc_attr($cat->slug); ?>">
                                         <?php echo esc_html($cat->name); ?>
                                     </a>
                                 <?php endforeach; ?>

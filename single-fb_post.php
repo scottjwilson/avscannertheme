@@ -20,7 +20,7 @@ get_header(); ?>
             <?php if ($post_cats && !is_wp_error($post_cats)): ?>
                 <div class="card-badges mb-4">
                     <?php foreach ($post_cats as $cat): ?>
-                        <a href="<?php echo esc_url(get_term_link($cat)); ?>" class="badge">
+                        <a href="<?php echo esc_url(get_term_link($cat)); ?>" class="badge badge-<?php echo esc_attr($cat->slug); ?>">
                             <?php echo esc_html($cat->name); ?>
                         </a>
                     <?php endforeach; ?>

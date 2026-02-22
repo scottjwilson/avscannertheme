@@ -1,6 +1,6 @@
 /*
- * Clean Vite WP
- * Footer Styles
+ * AV Scanner Theme
+ * Footer — Bold News Aesthetic
  */
 
 /* ========================================
@@ -8,16 +8,18 @@
    ======================================== */
 
 .site-footer {
-    background: var(--color-dark-950);
-    color: var(--color-dark-300);
-    padding: var(--space-16) 0 var(--space-8);
+    background: var(--color-dark-900);
+    color: var(--color-dark-400);
+    padding: var(--space-12) 0 var(--space-8);
+    border-top: 1px solid var(--border-footer);
+    box-shadow: var(--shadow-footer);
 }
 
 .footer-grid {
     display: grid;
     gap: var(--space-10);
-    padding-bottom: var(--space-12);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: var(--space-10);
+    border-bottom: 1px solid var(--border-footer);
 }
 
 @media (min-width: 768px) {
@@ -40,8 +42,8 @@
 .footer-brand .logo-mark {
     background: linear-gradient(
         135deg,
-        var(--color-primary-500) 0%,
-        var(--color-primary-600) 100%
+        var(--color-primary-600) 0%,
+        var(--color-accent-500) 100%
     );
 }
 
@@ -54,7 +56,7 @@
 .footer-nav h4 {
     font-family: var(--font-display);
     font-size: var(--text-sm);
-    font-weight: 600;
+    font-weight: 700;
     color: white;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider);
@@ -74,7 +76,7 @@
 }
 
 .footer-nav a:hover {
-    color: white;
+    color: var(--color-primary-400);
 }
 
 /* Bottom Bar */
@@ -82,7 +84,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-    padding-top: var(--space-8);
+    padding-top: var(--space-6);
     text-align: center;
 }
 
@@ -112,5 +114,5 @@
 }
 
 .footer-links a:hover {
-    color: white;
+    color: var(--color-primary-400);
 }
