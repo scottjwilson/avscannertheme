@@ -1,0 +1,119 @@
+/*
+ * AV Scanner Theme
+ * Category Navigation Bar — pinned below header
+ */
+
+/* ========================================
+   CATEGORY NAV BAR
+   ======================================== */
+
+.category-nav {
+    position: fixed;
+    top: calc(4px + 66px); /* accent bar + header height */
+    left: 0;
+    right: 0;
+    z-index: calc(var(--z-fixed) - 1);
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-primary);
+    transition: all var(--transition-base);
+}
+
+.category-nav.is-scrolled {
+    background: var(--header-bg-scrolled);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    top: calc(4px + 57px); /* smaller header when scrolled */
+}
+
+/* ========================================
+   SCROLLABLE ROW
+   ======================================== */
+
+.category-nav-scroll {
+    display: flex;
+    gap: var(--space-2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--space-2) 0;
+}
+
+.category-nav-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .category-nav-scroll {
+        flex-wrap: wrap;
+        overflow-x: visible;
+    }
+}
+
+/* ========================================
+   CATEGORY LINK ITEMS
+   ======================================== */
+
+.cat-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: var(--space-1) var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    color: var(--text-body);
+    background: var(--bg-surface-raised);
+    border: 1px solid var(--border-primary);
+    border-left: 3px solid var(--border-secondary);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.cat-link:hover {
+    color: var(--text-primary);
+    background: var(--bg-interactive-hover);
+}
+
+.cat-link.is-active {
+    color: white;
+    background: var(--color-primary-600);
+    border-color: var(--color-primary-600);
+}
+
+/* ========================================
+   CATEGORY COUNT
+   ======================================== */
+
+.cat-count {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    opacity: 0.5;
+}
+
+/* ========================================
+   CATEGORY-SPECIFIC LEFT BORDERS
+   ======================================== */
+
+.cat-crime        { border-left-color: var(--badge-crime); }
+.cat-accident     { border-left-color: var(--badge-accident); }
+.cat-fire         { border-left-color: var(--badge-fire); }
+.cat-missing-person { border-left-color: var(--badge-missing-person); }
+.cat-traffic      { border-left-color: var(--badge-traffic); }
+.cat-weather      { border-left-color: var(--badge-weather); }
+.cat-community    { border-left-color: var(--badge-community); }
+.cat-general      { border-left-color: var(--badge-general); }
+
+/* Active state uses category color as background */
+.cat-crime.is-active        { background: var(--badge-crime); border-color: var(--badge-crime); }
+.cat-accident.is-active     { background: var(--badge-accident); border-color: var(--badge-accident); }
+.cat-fire.is-active         { background: var(--badge-fire); border-color: var(--badge-fire); color: var(--badge-fire-text); }
+.cat-missing-person.is-active { background: var(--badge-missing-person); border-color: var(--badge-missing-person); }
+.cat-traffic.is-active      { background: var(--badge-traffic); border-color: var(--badge-traffic); }
+.cat-weather.is-active      { background: var(--badge-weather); border-color: var(--badge-weather); }
+.cat-community.is-active    { background: var(--badge-community); border-color: var(--badge-community); }
+.cat-general.is-active      { background: var(--badge-general); border-color: var(--badge-general); }

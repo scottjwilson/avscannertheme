@@ -97,6 +97,18 @@ function cvw_enqueue_assets(): void
         CVW_VERSION,
     );
     wp_enqueue_style(
+        "cvw-search",
+        get_template_directory_uri() . "/css/search.css",
+        ["cvw-header"],
+        CVW_VERSION,
+    );
+    wp_enqueue_style(
+        "cvw-category-nav",
+        get_template_directory_uri() . "/css/category-nav.css",
+        ["cvw-header"],
+        CVW_VERSION,
+    );
+    wp_enqueue_style(
         "cvw-footer",
         get_template_directory_uri() . "/css/footer.css",
         ["cvw-base", "cvw-layout"],
@@ -216,9 +228,30 @@ function cvw_taxonomy_query_fb_posts($query): void
 
     if ($query->is_tax("post_category_type")) {
         $query->set("post_type", "fb_post");
+        $query->set("posts_per_page", 9);
+    }
+
+    if ($query->is_post_type_archive("fb_post")) {
+        $query->set("posts_per_page", 9);
     }
 }
 add_action("pre_get_posts", "cvw_taxonomy_query_fb_posts");
+
+/**
+ * Scope search results to fb_post only.
+ */
+function cvw_search_query_fb_posts($query): void
+{
+    if (is_admin() || !$query->is_main_query()) {
+        return;
+    }
+
+    if ($query->is_search()) {
+        $query->set("post_type", "fb_post");
+        $query->set("posts_per_page", 9);
+    }
+}
+add_action("pre_get_posts", "cvw_search_query_fb_posts");
 
 /**
  * Body Classes

@@ -80,6 +80,9 @@
     --badge-community-text: #fff;
     --badge-general: #6b7280;
     --badge-general-text: #fff;
+    --badge-sponsored: #9ca3af;
+    --badge-sponsored-text: #fff;
+    --badge-sponsored-accent: rgba(156, 163, 175, 0.12);
 
     /* ========================================
        SEMANTIC TOKENS (dark defaults)

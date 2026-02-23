@@ -1,8 +1,8 @@
 /*
  * AV Scanner Theme
- * Front Page — top spacing for the posts grid
+ * Front Page — reduce section top padding since main-content already offsets for fixed header
  */
 
 .is-front-page .section:first-of-type {
-    padding-top: calc(var(--space-16) + 4px);
+    padding-top: var(--space-8);
 }

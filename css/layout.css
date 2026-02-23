@@ -33,15 +33,36 @@
 }
 
 /* ========================================
-   FILTER BAR
+   FILTER / CATEGORY NAV — shared button styles
    ======================================== */
 
-.filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-bottom: var(--space-8);
+/* Filter count badge */
+.filter-count {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    opacity: 0.6;
+    margin-left: var(--space-1);
 }
+
+/* Color-coded filter buttons — active state */
+.btn.filter-crime.btn-primary { background: var(--badge-crime); border-color: var(--badge-crime); }
+.btn.filter-accident.btn-primary { background: var(--badge-accident); border-color: var(--badge-accident); }
+.btn.filter-fire.btn-primary { background: var(--badge-fire); border-color: var(--badge-fire); color: var(--badge-fire-text); }
+.btn.filter-missing-person.btn-primary { background: var(--badge-missing-person); border-color: var(--badge-missing-person); }
+.btn.filter-traffic.btn-primary { background: var(--badge-traffic); border-color: var(--badge-traffic); }
+.btn.filter-weather.btn-primary { background: var(--badge-weather); border-color: var(--badge-weather); }
+.btn.filter-community.btn-primary { background: var(--badge-community); border-color: var(--badge-community); }
+.btn.filter-general.btn-primary { background: var(--badge-general); border-color: var(--badge-general); }
+
+/* Color-coded filter buttons — inactive state (left-border accent) */
+.btn.filter-crime.btn-outline { border-left: 3px solid var(--badge-crime); }
+.btn.filter-accident.btn-outline { border-left: 3px solid var(--badge-accident); }
+.btn.filter-fire.btn-outline { border-left: 3px solid var(--badge-fire); }
+.btn.filter-missing-person.btn-outline { border-left: 3px solid var(--badge-missing-person); }
+.btn.filter-traffic.btn-outline { border-left: 3px solid var(--badge-traffic); }
+.btn.filter-weather.btn-outline { border-left: 3px solid var(--badge-weather); }
+.btn.filter-community.btn-outline { border-left: 3px solid var(--badge-community); }
+.btn.filter-general.btn-outline { border-left: 3px solid var(--badge-general); }
 
 /* ========================================
    CARD EXTENSIONS
@@ -186,6 +207,22 @@
     color: var(--badge-general-text);
 }
 
+.badge-sponsored {
+    background: var(--badge-sponsored);
+    color: var(--badge-sponsored-text);
+    font-style: italic;
+}
+
+.card-sponsored {
+    border-left-color: var(--badge-sponsored);
+    background: var(--badge-sponsored-accent);
+}
+
+.card-sponsored:hover {
+    border-left-color: var(--badge-sponsored);
+}
+
+
 /* ========================================
    EMPTY STATE
    ======================================== */
@@ -316,4 +353,31 @@
     background: var(--color-primary-600);
     color: white;
     border-color: var(--color-primary-600);
+}
+
+/* ========================================
+   HERO CARD (front page first post)
+   ======================================== */
+
+.card-hero {
+    grid-column: span 1;
+}
+
+@media (min-width: 1024px) {
+    .card-hero {
+        grid-column: span 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-6);
+        align-items: center;
+    }
+
+    .card-hero .card-image {
+        aspect-ratio: 3 / 2;
+        margin-bottom: 0;
+    }
+
+    .card-hero .card-title {
+        font-size: var(--text-2xl);
+    }
 }

@@ -2,7 +2,9 @@ import "../css/variables.css";
 import "../css/base.css";
 import "../css/layout.css";
 import "../css/header.css";
+import "../css/category-nav.css";
 import "../css/footer.css";
+import "../css/search.css";
 import "../css/front-page.css";
 
 /**
@@ -17,12 +19,15 @@ import "../css/front-page.css";
   // HEADER SCROLL BEHAVIOR
   // ========================================
   const header = document.querySelector(".site-header");
+  const categoryNav = document.querySelector(".category-nav");
 
   function handleHeaderScroll() {
     if (window.scrollY > 50) {
       header?.classList.add("is-scrolled");
+      categoryNav?.classList.add("is-scrolled");
     } else {
       header?.classList.remove("is-scrolled");
+      categoryNav?.classList.remove("is-scrolled");
     }
   }
 

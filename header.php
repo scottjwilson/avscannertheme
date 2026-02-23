@@ -16,28 +16,37 @@
     <div class="container">
         <div class="header-inner">
             <!-- Logo -->
-            <a href="<?php echo esc_url(home_url("/")); ?>" class="site-logo">
-                <?php if (has_custom_logo()): ?>
-                    <?php the_custom_logo(); ?>
-                <?php else: ?>
-                    <span class="logo-mark"><?php echo esc_html(
-                        mb_substr(get_bloginfo("name"), 0, 1),
-                    ); ?></span>
-                    <span><?php bloginfo("name"); ?></span>
-                <?php endif; ?>
-            </a>
+            <?php if (has_custom_logo()):
+                $logo_id  = get_theme_mod('custom_logo');
+                $logo_url = wp_get_attachment_image_url($logo_id, 'full');
+            ?>
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="site-logo">
+                    <img src="<?php echo esc_url($logo_url); ?>"
+                         alt="<?php echo esc_attr(get_bloginfo('name')); ?>"
+                         class="site-logo-img">
+                </a>
+            <?php elseif (file_exists(get_template_directory() . '/images/logo.png')): ?>
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="site-logo">
+                    <img src="<?php echo esc_url(get_template_directory_uri() . '/images/logo.png'); ?>"
+                         alt="<?php echo esc_attr(get_bloginfo('name')); ?>"
+                         class="site-logo-img">
+                </a>
+            <?php else: ?>
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="site-logo">
+                    <span class="site-logo-text"><?php bloginfo('name'); ?></span>
+                </a>
+            <?php endif; ?>
 
-            <!-- Desktop Navigation -->
-            <nav class="nav-desktop">
-                <?php wp_nav_menu([
-                    "theme_location" => "primary",
-                    "container" => false,
-                    "menu_class" => "nav-menu",
-                    "fallback_cb" => false,
-                    "depth" => 1,
-                    "link_class" => "nav-link",
-                ]); ?>
-            </nav>
+            <!-- Header Search (full width) -->
+            <form role="search" method="get" class="header-search" action="<?php echo esc_url(home_url('/')); ?>">
+                <input type="search" class="search-input" name="s"
+                       placeholder="<?php esc_attr_e('Search posts...', 'clean-vite-wp'); ?>"
+                       value="<?php echo get_search_query(); ?>" autocomplete="off">
+                <input type="hidden" name="post_type" value="fb_post">
+                <button type="submit" class="search-submit" aria-label="<?php esc_attr_e('Search', 'clean-vite-wp'); ?>">
+                    <?php echo cvw_icon('search', 18); ?>
+                </button>
+            </form>
 
             <!-- Mobile Menu Toggle -->
             <button class="menu-toggle" aria-expanded="false" aria-label="<?php esc_attr_e(
@@ -57,6 +66,13 @@
     </div>
 
     <!-- Mobile Navigation -->
+    <?php
+    $nav_categories = get_terms([
+        'taxonomy'   => 'post_category_type',
+        'hide_empty' => true,
+        'exclude'    => avscanner_get_ad_term_id(),
+    ]);
+    ?>
     <nav class="nav-mobile" aria-hidden="true">
         <?php wp_nav_menu([
             "theme_location" => "primary",
@@ -66,7 +82,44 @@
             "depth" => 1,
             "link_class" => "nav-link",
         ]); ?>
+
+        <?php if (!is_wp_error($nav_categories) && !empty($nav_categories)): ?>
+            <div class="nav-mobile-categories">
+                <span class="nav-mobile-label"><?php esc_html_e('Categories', 'clean-vite-wp'); ?></span>
+                <?php foreach ($nav_categories as $cat): ?>
+                    <a href="<?php echo esc_url(get_term_link($cat)); ?>"
+                       class="badge badge-<?php echo esc_attr($cat->slug); ?>">
+                        <?php echo esc_html($cat->name); ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </nav>
 </header>
+
+<?php if (!is_wp_error($nav_categories) && !empty($nav_categories)):
+    $all_url    = is_front_page() ? home_url('/') : get_post_type_archive_link('fb_post');
+    $all_active = is_front_page() || (is_post_type_archive('fb_post') && !is_tax());
+?>
+<nav class="category-nav" aria-label="<?php esc_attr_e('Categories', 'clean-vite-wp'); ?>">
+    <div class="container">
+        <div class="category-nav-scroll">
+            <a href="<?php echo esc_url($all_url); ?>"
+               class="cat-link <?php echo $all_active ? 'is-active' : ''; ?>">
+                <?php esc_html_e('All', 'clean-vite-wp'); ?>
+            </a>
+            <?php foreach ($nav_categories as $cat):
+                $is_active = is_tax('post_category_type', $cat->slug);
+            ?>
+                <a href="<?php echo esc_url(get_term_link($cat)); ?>"
+                   class="cat-link cat-<?php echo esc_attr($cat->slug); ?> <?php echo $is_active ? 'is-active' : ''; ?>">
+                    <?php echo esc_html($cat->name); ?>
+                    <span class="cat-count"><?php echo esc_html($cat->count); ?></span>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</nav>
+<?php endif; ?>
 
 <main class="main-content">

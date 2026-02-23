@@ -12,6 +12,10 @@ get_header(); ?>
     $fb_image = get_post_meta(get_the_ID(), "_fb_full_picture", true);
     $fb_link = get_post_meta(get_the_ID(), "_fb_permalink", true);
     $post_cats = get_the_terms(get_the_ID(), "post_category_type");
+    $is_ad     = false;
+    if ($post_cats && ! is_wp_error($post_cats)) {
+        $is_ad = in_array('advertisement', wp_list_pluck($post_cats, 'slug'), true);
+    }
 ?>
 
 <article class="section">
@@ -19,16 +23,20 @@ get_header(); ?>
         <header class="single-header">
             <?php if ($post_cats && !is_wp_error($post_cats)): ?>
                 <div class="card-badges mb-4">
-                    <?php foreach ($post_cats as $cat): ?>
-                        <a href="<?php echo esc_url(get_term_link($cat)); ?>" class="badge badge-<?php echo esc_attr($cat->slug); ?>">
-                            <?php echo esc_html($cat->name); ?>
-                        </a>
-                    <?php endforeach; ?>
+                    <?php if ($is_ad): ?>
+                        <span class="badge badge-sponsored">Sponsored</span>
+                    <?php else: ?>
+                        <?php foreach ($post_cats as $cat): ?>
+                            <a href="<?php echo esc_url(get_term_link($cat)); ?>" class="badge badge-<?php echo esc_attr($cat->slug); ?>">
+                                <?php echo esc_html($cat->name); ?>
+                            </a>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
             <span class="single-date">
-                <?php echo get_the_date(); ?>
+                <?php echo get_the_date("M j, Y"); ?> at <?php echo get_the_time("g:i A"); ?>
             </span>
             <h1 class="text-display single-title"><?php the_title(); ?></h1>
         </header>
