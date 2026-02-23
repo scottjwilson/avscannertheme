@@ -50,6 +50,7 @@ get_header(); ?>
 
         <?php else: ?>
             <div class="empty-state">
+                <?php echo cvw_empty_state_svg('not-found'); ?>
                 <h2 class="text-display"><?php esc_html_e(
                     "Nothing Found",
                     "clean-vite-wp",

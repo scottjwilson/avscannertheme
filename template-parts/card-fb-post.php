@@ -4,13 +4,11 @@
  *
  * Args (via get_template_part $args):
  *   show_time (bool)  — append time to date display (default false)
- *   is_hero   (bool)  — render as hero card (default false)
  *
  * @package Clean_Vite_WP
  */
 
 $show_time = !empty($args["show_time"]);
-$is_hero = !empty($args["is_hero"]);
 $thumb_id = get_post_thumbnail_id();
 $fb_image = $thumb_id
     ? wp_get_attachment_url($thumb_id)
@@ -21,18 +19,11 @@ $is_ad = false;
 if ($post_cats && !is_wp_error($post_cats)) {
     $is_ad = in_array("advertisement", wp_list_pluck($post_cats, "slug"), true);
 }
-$card_class =
-    "card card-hover" .
-    ($is_hero && !$is_ad ? " card-hero" : "") .
-    ($is_ad ? " card-sponsored" : "");
+$card_class = "card card-hover" . ($is_ad ? " card-sponsored" : "");
 ?>
 
 <article class="<?php echo esc_attr($card_class); ?>">
-    <?php
-    $sizes = $is_hero
-        ? '(min-width: 1024px) 620px, (min-width: 640px) 50vw, 100vw'
-        : '(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw';
-    ?>
+    <?php $sizes = '(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw'; ?>
     <?php if ($thumb_id) : ?>
         <a href="<?php the_permalink(); ?>" class="card-image-link<?php echo $fb_video ? ' has-video' : ''; ?>">
             <div class="card-image">

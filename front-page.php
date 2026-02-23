@@ -27,13 +27,9 @@ $posts_query = new WP_Query([
         <?php if ($posts_query->have_posts()): ?>
             <div class="grid grid-3 stagger-children reveal">
                 <?php
-                $post_index = 0;
                 while ($posts_query->have_posts()):
                     $posts_query->the_post();
-                    get_template_part('template-parts/card-fb-post', null, [
-                        'is_hero' => $post_index === 0,
-                    ]);
-                    $post_index++;
+                    get_template_part('template-parts/card-fb-post');
                 endwhile;
                 ?>
             </div>
@@ -57,6 +53,7 @@ $posts_query = new WP_Query([
 
         <?php else: ?>
             <div class="empty-state">
+                <?php echo cvw_empty_state_svg('no-posts'); ?>
                 <h2 class="text-display"><?php esc_html_e("No Posts Found", "clean-vite-wp"); ?></h2>
                 <p><?php esc_html_e("There are no scanner posts to display yet.", "clean-vite-wp"); ?></p>
             </div>

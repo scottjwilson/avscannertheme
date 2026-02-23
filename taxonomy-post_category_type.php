@@ -41,6 +41,7 @@ $term = get_queried_object();
 
         <?php else: ?>
             <div class="empty-state">
+                <?php echo cvw_empty_state_svg('no-posts'); ?>
                 <h2 class="text-display"><?php esc_html_e("No Posts Found", "clean-vite-wp"); ?></h2>
                 <p><?php printf(
                     esc_html__('No posts found in the "%s" category yet.', 'clean-vite-wp'),

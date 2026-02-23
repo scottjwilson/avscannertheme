@@ -215,6 +215,18 @@ function cvw_icon($name, $size = 20): string
             '" height="' .
             $size .
             '" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m-7 7 7-7 7 7"/></svg>',
+        "sun" =>
+            '<svg width="' .
+            $size .
+            '" height="' .
+            $size .
+            '" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+        "moon" =>
+            '<svg width="' .
+            $size .
+            '" height="' .
+            $size .
+            '" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     ];
 
     return $icons[$name] ?? "";
@@ -278,3 +290,55 @@ function cvw_body_classes($classes): array
     return $classes;
 }
 add_filter("body_class", "cvw_body_classes");
+
+/**
+ * Empty State SVG Illustrations
+ *
+ * Returns context-specific inline SVGs using currentColor for theming.
+ */
+function cvw_empty_state_svg(string $type = 'no-posts'): string
+{
+    switch ($type) {
+        case 'no-posts':
+            // Empty inbox/folder with scanner motif
+            return '<svg class="empty-state-illustration" width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="25" y="35" width="70" height="55" rx="6" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                <path d="M25 50h70" stroke="currentColor" stroke-width="2" opacity="0.2"/>
+                <rect x="35" y="58" width="30" height="3" rx="1.5" fill="currentColor" opacity="0.15"/>
+                <rect x="35" y="66" width="50" height="3" rx="1.5" fill="currentColor" opacity="0.1"/>
+                <rect x="35" y="74" width="40" height="3" rx="1.5" fill="currentColor" opacity="0.1"/>
+                <circle cx="60" cy="28" r="12" stroke="currentColor" stroke-width="2" opacity="0.25"/>
+                <path d="M55 28l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"/>
+                <path d="M85 20l5-5M85 25h7M90 15v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.15"/>
+            </svg>';
+
+        case 'no-results':
+            // Magnifying glass with question mark
+            return '<svg class="empty-state-illustration" width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="52" cy="52" r="28" stroke="currentColor" stroke-width="2.5" opacity="0.3"/>
+                <path d="M73 73l20 20" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+                <path d="M46 42a8 8 0 0116 2c0 4-6 5-6 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.25"/>
+                <circle cx="56" cy="62" r="1.5" fill="currentColor" opacity="0.25"/>
+                <path d="M20 30l-4-4M22 26h-6M18 20v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.12"/>
+                <path d="M95 40l3-3M97 40h-5M95 35v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.12"/>
+            </svg>';
+
+        case 'not-found':
+            // Broken signal / radar dish
+            return '<svg class="empty-state-illustration" width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="65" r="30" stroke="currentColor" stroke-width="2" opacity="0.15"/>
+                <circle cx="60" cy="65" r="20" stroke="currentColor" stroke-width="2" opacity="0.2"/>
+                <circle cx="60" cy="65" r="10" stroke="currentColor" stroke-width="2" opacity="0.25"/>
+                <circle cx="60" cy="65" r="3" fill="currentColor" opacity="0.3"/>
+                <path d="M60 65l18-25" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+                <path d="M72 35l8 3M75 43l5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
+                <path d="M38 30l-2-6M32 28l8-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.12"/>
+                <path d="M88 55l4-2M90 58l2-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.12"/>
+                <path d="M40 100h40" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
+                <path d="M50 100l10-5 10 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.2"/>
+            </svg>';
+
+        default:
+            return '';
+    }
+}

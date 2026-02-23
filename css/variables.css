@@ -328,3 +328,127 @@
         --gradient-text-to: var(--color-accent-600);
     }
 }
+
+/* ========================================
+   MANUAL THEME OVERRIDES (JS toggle)
+   ======================================== */
+
+[data-theme="light"] {
+    color-scheme: light;
+
+    /* Surfaces */
+    --bg-page: #ffffff;
+    --bg-surface: #ffffff;
+    --bg-surface-raised: var(--color-neutral-50);
+    --bg-surface-overlay: rgba(255, 255, 255, 0.85);
+    --bg-surface-inset: var(--color-neutral-100);
+    --bg-interactive-hover: var(--color-neutral-100);
+    --bg-mobile-nav: #ffffff;
+
+    /* Text */
+    --text-primary: var(--color-dark-900);
+    --text-body: var(--color-dark-600);
+    --text-muted: var(--color-dark-500);
+    --text-faint: var(--color-dark-400);
+    --text-prose: var(--color-dark-700);
+
+    /* Borders */
+    --border-primary: var(--color-neutral-200);
+    --border-secondary: var(--color-neutral-300);
+    --border-subtle: rgba(0, 0, 0, 0.06);
+
+    /* Links */
+    --link-color: var(--color-primary-600);
+    --link-color-hover: var(--color-primary-700);
+
+    /* Header */
+    --header-bg: #ffffff;
+    --header-bg-scrolled: rgba(255, 255, 255, 0.95);
+    --shadow-header: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+    /* Selection */
+    --selection-bg: rgba(220, 38, 38, 0.15);
+    --selection-text: var(--color-dark-900);
+
+    /* Interactive */
+    --btn-outline-hover-bg: rgba(220, 38, 38, 0.05);
+
+    /* Badge defaults */
+    --badge-default-bg: var(--color-neutral-100);
+    --badge-default-text: var(--color-dark-600);
+
+    /* Shadows */
+    --shadow-card: 0 2px 12px rgb(0 0 0 / 0.06);
+    --shadow-card-hover: 0 4px 20px rgb(0 0 0 / 0.1);
+
+    /* Glows */
+    --shadow-glow-primary: 0 0 20px -6px rgba(220, 38, 38, 0.25);
+    --shadow-glow-accent: 0 0 20px -6px rgba(245, 158, 11, 0.25);
+
+    /* Footer */
+    --shadow-footer: 0 -8px 24px rgba(0, 0, 0, 0.06);
+
+    /* Text gradient */
+    --gradient-text-from: var(--color-primary-700);
+    --gradient-text-to: var(--color-accent-600);
+}
+
+[data-theme="dark"] {
+    color-scheme: dark;
+
+    /* Surfaces */
+    --bg-page: var(--color-dark-950);
+    --bg-surface: var(--color-dark-900);
+    --bg-surface-raised: var(--color-dark-800);
+    --bg-surface-overlay: rgba(15, 23, 42, 0.8);
+    --bg-surface-inset: var(--color-dark-700);
+    --bg-interactive-hover: var(--color-dark-800);
+    --bg-mobile-nav: var(--color-dark-950);
+
+    /* Text */
+    --text-primary: #fff;
+    --text-body: var(--color-dark-300);
+    --text-muted: var(--color-dark-400);
+    --text-faint: var(--color-dark-500);
+    --text-prose: var(--color-dark-200);
+
+    /* Borders */
+    --border-primary: var(--color-dark-700);
+    --border-secondary: var(--color-dark-600);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+
+    /* Links */
+    --link-color: var(--color-primary-400);
+    --link-color-hover: var(--color-primary-300);
+
+    /* Header */
+    --header-bg: var(--color-dark-900);
+    --header-bg-scrolled: rgba(15, 23, 42, 0.97);
+    --shadow-header: 0 2px 20px rgba(0, 0, 0, 0.4);
+
+    /* Selection */
+    --selection-bg: rgba(220, 38, 38, 0.3);
+    --selection-text: #fff;
+
+    /* Interactive */
+    --btn-outline-hover-bg: rgba(220, 38, 38, 0.08);
+
+    /* Badge defaults */
+    --badge-default-bg: var(--color-dark-700);
+    --badge-default-text: var(--color-dark-200);
+
+    /* Shadows */
+    --shadow-card: 0 2px 12px rgb(0 0 0 / 0.2);
+    --shadow-card-hover: 0 4px 20px rgb(0 0 0 / 0.3);
+
+    /* Glows */
+    --shadow-glow-primary: 0 0 30px -8px var(--color-primary-600);
+    --shadow-glow-accent: 0 0 30px -8px var(--color-accent-500);
+
+    /* Footer */
+    --shadow-footer: none;
+
+    /* Text gradient */
+    --gradient-text-from: var(--color-primary-500);
+    --gradient-text-to: var(--color-accent-500);
+}

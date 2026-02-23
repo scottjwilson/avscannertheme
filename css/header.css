@@ -85,6 +85,53 @@
 /* Desktop nav removed — category bar serves as primary navigation */
 
 /* ========================================
+   THEME TOGGLE
+   ======================================== */
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-interactive-hover);
+}
+
+/* Default (no data-theme / dark): show moon, hide sun */
+.theme-toggle .icon-sun {
+    display: none;
+}
+
+.theme-toggle .icon-moon {
+    display: flex;
+}
+
+/* When dark is explicitly set */
+[data-theme="dark"] .theme-toggle .icon-sun {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+    display: flex;
+}
+
+/* When light mode: show sun, hide moon */
+[data-theme="light"] .theme-toggle .icon-sun {
+    display: flex;
+}
+
+[data-theme="light"] .theme-toggle .icon-moon {
+    display: none;
+}
+
+/* ========================================
    MOBILE MENU TOGGLE
    ======================================== */
 

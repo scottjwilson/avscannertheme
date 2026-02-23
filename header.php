@@ -4,6 +4,9 @@
     <meta charset="<?php bloginfo("charset"); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark light">
+    <script>
+        (function(){var t=localStorage.getItem('cvw-theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t;document.querySelector('meta[name="color-scheme"]').content=t;}})();
+    </script>
     <?php wp_head(); ?>
 </head>
 
@@ -47,6 +50,12 @@
                     <?php echo cvw_icon('search', 18); ?>
                 </button>
             </form>
+
+            <!-- Theme Toggle -->
+            <button class="theme-toggle" aria-label="<?php esc_attr_e('Toggle theme', 'clean-vite-wp'); ?>">
+                <span class="icon-sun"><?php echo cvw_icon('sun', 20); ?></span>
+                <span class="icon-moon"><?php echo cvw_icon('moon', 20); ?></span>
+            </button>
 
             <!-- Mobile Menu Toggle -->
             <button class="menu-toggle" aria-expanded="false" aria-label="<?php esc_attr_e(

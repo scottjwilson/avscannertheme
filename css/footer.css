@@ -193,3 +193,35 @@
 .footer-links a:hover {
     color: var(--color-primary-400);
 }
+
+/* ========================================
+   BACK TO TOP BUTTON
+   ======================================== */
+
+.back-to-top {
+    position: fixed;
+    bottom: var(--space-6);
+    right: var(--space-6);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+    z-index: 50;
+}
+.back-to-top[hidden] { display: none; }
+.back-to-top.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.back-to-top:hover {
+    background: var(--color-primary-600);
+}

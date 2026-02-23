@@ -166,6 +166,27 @@ import "../css/front-page.css";
   }
 
   // ========================================
+  // THEME TOGGLE (DARK / LIGHT)
+  // ========================================
+  function initThemeToggle() {
+    const toggle = document.querySelector(".theme-toggle");
+    if (!toggle) return;
+
+    // Restore saved preference
+    const saved = localStorage.getItem("cvw-theme");
+    if (saved === "light" || saved === "dark") {
+      document.documentElement.dataset.theme = saved;
+    }
+
+    toggle.addEventListener("click", () => {
+      const current = document.documentElement.dataset.theme;
+      const next = current === "light" ? "dark" : "light";
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem("cvw-theme", next);
+    });
+  }
+
+  // ========================================
   // BACK TO TOP
   // ========================================
   function initBackToTop() {
@@ -199,6 +220,73 @@ import "../css/front-page.css";
   }
 
   // ========================================
+  // SKELETON LOADERS
+  // ========================================
+  function initSkeletonLoaders() {
+    const grids = document.querySelectorAll('.grid.stagger-children');
+    const template = document.getElementById('card-skeleton');
+    if (!grids.length || !template) return;
+
+    grids.forEach((grid) => {
+      const cards = grid.querySelectorAll('.card');
+      if (!cards.length) return;
+
+      // Clone skeletons to match card count (cap at visible count)
+      const count = Math.min(cards.length, 6);
+      const skeletonWrap = document.createElement('div');
+      skeletonWrap.className = 'skeleton-grid';
+      skeletonWrap.classList.add('grid', 'grid-3');
+
+      for (let i = 0; i < count; i++) {
+        skeletonWrap.appendChild(template.content.cloneNode(true));
+      }
+
+      grid.parentNode.insertBefore(skeletonWrap, grid);
+      grid.style.display = 'none';
+
+      // Wait for all images in this grid to load
+      const images = grid.querySelectorAll('.card-image img');
+      if (!images.length) {
+        removeSkeleton(skeletonWrap, grid);
+        return;
+      }
+
+      let loaded = 0;
+      const total = images.length;
+
+      function onImageReady() {
+        loaded++;
+        if (loaded >= total) {
+          removeSkeleton(skeletonWrap, grid);
+        }
+      }
+
+      images.forEach((img) => {
+        if (img.complete && img.naturalHeight > 0) {
+          onImageReady();
+        } else {
+          img.addEventListener('load', onImageReady, { once: true });
+          img.addEventListener('error', onImageReady, { once: true });
+        }
+      });
+
+      // Safety timeout — don't block forever on slow images
+      setTimeout(() => removeSkeleton(skeletonWrap, grid), 5000);
+    });
+  }
+
+  function removeSkeleton(skeletonWrap, grid) {
+    if (!skeletonWrap.parentNode) return; // Already removed
+    skeletonWrap.classList.add('skeleton-fade-out');
+    grid.style.display = '';
+    skeletonWrap.addEventListener('transitionend', () => {
+      skeletonWrap.remove();
+    }, { once: true });
+    // Fallback removal if transition doesn't fire
+    setTimeout(() => skeletonWrap.remove(), 400);
+  }
+
+  // ========================================
   // INITIALIZE
   // ========================================
   function init() {
@@ -216,6 +304,8 @@ import "../css/front-page.css";
     });
 
     handleHeaderScroll();
+    initThemeToggle();
+    initSkeletonLoaders();
     initRevealAnimations();
     initStaggerAnimations();
     initSmoothScroll();

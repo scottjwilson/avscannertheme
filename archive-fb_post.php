@@ -37,6 +37,7 @@ get_header(); ?>
 
         <?php else: ?>
             <div class="empty-state">
+                <?php echo cvw_empty_state_svg('no-posts'); ?>
                 <h2 class="text-display"><?php esc_html_e("No Posts Found", "clean-vite-wp"); ?></h2>
                 <p><?php esc_html_e("There are no scanner posts to display yet.", "clean-vite-wp"); ?></p>
                 <a href="<?php echo esc_url(home_url("/")); ?>" class="btn btn-primary">

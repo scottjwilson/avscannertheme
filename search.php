@@ -47,6 +47,7 @@ get_header(); ?>
 
         <?php else: ?>
             <div class="empty-state">
+                <?php echo cvw_empty_state_svg('no-results'); ?>
                 <h2 class="text-display"><?php esc_html_e("No Results Found", "clean-vite-wp"); ?></h2>
                 <p><?php esc_html_e("No scanner posts matched your search. Try a different term.", "clean-vite-wp"); ?></p>
                 <a href="<?php echo esc_url(home_url("/")); ?>" class="btn btn-primary">

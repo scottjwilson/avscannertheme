@@ -1,0 +1,49 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: 🚀 Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🔨 Build Assets
+        run: npm run build
+
+      - name: 📋 List dist folder
+        run: ls -la dist/
+
+      - name: 🔑 Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p 6543 165.140.159.249 >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: 🧪 Test SSH Connection
+        run: |
+          ssh -v -i ~/.ssh/deploy_key -p 6543 -o StrictHostKeyChecking=no -o ConnectTimeout=10 avscannercom@165.140.159.249 "echo 'SSH connection successful'"
+
+      - name: 📂 Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            --exclude=node_modules \
+            --exclude=.git \
+            --exclude=.github \
+            -e "ssh -i ~/.ssh/deploy_key -p 6543 -o StrictHostKeyChecking=no" \
+            ./ avscannercom@165.140.159.249:/home/avscannercom/public_html/wp-content/themes/avscannertheme/

@@ -77,6 +77,20 @@ $footer_categories = get_terms([
     </div>
 </footer>
 
+<template id="card-skeleton">
+    <div class="card card-skeleton">
+        <div class="skeleton skeleton-image"></div>
+        <div class="skeleton skeleton-line" style="width:35%"></div>
+        <div class="skeleton skeleton-line skeleton-line-lg" style="width:85%"></div>
+        <div class="skeleton skeleton-line" style="width:100%"></div>
+        <div class="skeleton skeleton-line" style="width:60%"></div>
+    </div>
+</template>
+
+<button class="back-to-top" aria-label="Back to top" hidden>
+    <?php echo cvw_icon('arrow-up', 20); ?>
+</button>
+
 <?php wp_footer(); ?>
 </body>
 </html>
