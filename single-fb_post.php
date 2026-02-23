@@ -9,7 +9,10 @@ get_header(); ?>
 
 <?php while (have_posts()):
     the_post();
-    $fb_image = get_post_meta(get_the_ID(), "_fb_full_picture", true);
+    $thumb_id = get_post_thumbnail_id();
+    $fb_image = $thumb_id
+        ? wp_get_attachment_url($thumb_id)
+        : get_post_meta(get_the_ID(), "_fb_full_picture", true);
     $fb_video = get_post_meta(get_the_ID(), "_fb_video_url", true);
     $fb_link = get_post_meta(get_the_ID(), "_fb_permalink", true);
     $post_cats = get_the_terms(get_the_ID(), "post_category_type");
@@ -44,7 +47,7 @@ get_header(); ?>
 
         <?php if ($fb_video): ?>
             <div class="single-video" data-fb-permalink="<?php echo esc_url($fb_link); ?>">
-                <video controls preload="metadata" poster="<?php echo esc_url($fb_image); ?>">
+                <video controls preload="metadata" poster="<?php echo esc_url($thumb_id ? wp_get_attachment_url($thumb_id) : $fb_image); ?>">
                     <source src="<?php echo esc_url($fb_video); ?>" type="video/mp4">
                 </video>
                 <div class="single-video-fallback" hidden>
@@ -68,9 +71,16 @@ get_header(); ?>
             </script>
         <?php elseif ($fb_image): ?>
             <div class="single-image">
-                <img src="<?php echo esc_url($fb_image); ?>"
-                     alt="<?php the_title_attribute(); ?>"
-                     loading="lazy">
+                <?php if ($thumb_id) :
+                    echo wp_get_attachment_image($thumb_id, 'large', false, [
+                        'sizes' => '(min-width: 800px) 800px, 100vw',
+                        'alt'   => get_the_title(),
+                    ]);
+                else : ?>
+                    <img src="<?php echo esc_url($fb_image); ?>"
+                         alt="<?php the_title_attribute(); ?>"
+                         loading="lazy">
+                <?php endif; ?>
             </div>
         <?php endif; ?>
 
@@ -89,29 +99,37 @@ get_header(); ?>
             </div>
         <?php endif; ?>
 
-        <nav class="single-nav">
-            <?php
-            $prev = get_previous_post();
-            $next = get_next_post();
-            ?>
-            <div>
-                <?php if ($prev): ?>
-                    <span class="single-nav-label"><?php esc_html_e("Previous", "clean-vite-wp"); ?></span>
-                    <a href="<?php echo get_permalink($prev); ?>" class="single-nav-link">
-                        <?php echo esc_html($prev->post_title); ?>
-                    </a>
-                <?php endif; ?>
-            </div>
-            <div class="single-nav-next">
-                <?php if ($next): ?>
-                    <span class="single-nav-label"><?php esc_html_e("Next", "clean-vite-wp"); ?></span>
-                    <a href="<?php echo get_permalink($next); ?>" class="single-nav-link">
-                        <?php echo esc_html($next->post_title); ?>
-                    </a>
-                <?php endif; ?>
-            </div>
-        </nav>
     </div>
+
+    <?php
+    $related_terms = get_the_terms(get_the_ID(), 'post_category_type');
+    if ($related_terms && ! is_wp_error($related_terms)) :
+        $related_query = new WP_Query([
+            'post_type'      => 'fb_post',
+            'posts_per_page' => 3,
+            'post__not_in'   => [get_the_ID()],
+            'tax_query'      => [[
+                'taxonomy' => 'post_category_type',
+                'field'    => 'term_id',
+                'terms'    => $related_terms[0]->term_id,
+            ]],
+            'no_found_rows'  => true,
+        ]);
+        if ($related_query->have_posts()) : ?>
+            <section class="related-posts">
+                <div class="container">
+                    <h2 class="related-posts-title">Related Posts</h2>
+                    <div class="grid grid-3">
+                        <?php while ($related_query->have_posts()) : $related_query->the_post();
+                            get_template_part('template-parts/card-fb-post');
+                        endwhile; ?>
+                    </div>
+                </div>
+            </section>
+        <?php endif;
+        wp_reset_postdata();
+    endif;
+    ?>
 </article>
 
 <?php endwhile; ?>

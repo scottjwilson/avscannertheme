@@ -209,6 +209,12 @@ function cvw_icon($name, $size = 20): string
             '" height="' .
             $size .
             '" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.333" stroke="currentColor" stroke-width="1.5"/><path d="M1.667 10h16.666M10 1.667a12.75 12.75 0 013.333 8.333 12.75 12.75 0 01-3.333 8.333 12.75 12.75 0 01-3.333-8.333A12.75 12.75 0 0110 1.667z" stroke="currentColor" stroke-width="1.5"/></svg>',
+        "arrow-up" =>
+            '<svg width="' .
+            $size .
+            '" height="' .
+            $size .
+            '" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m-7 7 7-7 7 7"/></svg>',
     ];
 
     return $icons[$name] ?? "";
@@ -236,6 +242,14 @@ function cvw_taxonomy_query_fb_posts($query): void
     }
 }
 add_action("pre_get_posts", "cvw_taxonomy_query_fb_posts");
+
+/**
+ * Explicitly declare thumbnail support for fb_post CPT
+ */
+function cvw_post_type_supports(): void {
+    add_post_type_support('fb_post', 'thumbnail');
+}
+add_action('init', 'cvw_post_type_supports');
 
 /**
  * Scope search results to fb_post only.

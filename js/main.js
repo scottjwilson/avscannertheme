@@ -139,39 +139,18 @@ import "../css/front-page.css";
   }
 
   // ========================================
-  // LAZY LOADING IMAGES
+  // IMAGE FADE-IN ON LOAD
   // ========================================
-  function initLazyLoad() {
-    const lazyImages = document.querySelectorAll("img[data-src]");
-
-    if (!lazyImages.length) return;
-
-    if ("IntersectionObserver" in window) {
-      const imageObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const img = entry.target;
-              img.src = img.dataset.src;
-              img.removeAttribute("data-src");
-              imageObserver.unobserve(img);
-            }
-          });
-        },
-        {
-          rootMargin: "50px 0px",
-        },
-      );
-
-      lazyImages.forEach((img) => {
-        imageObserver.observe(img);
-      });
-    } else {
-      lazyImages.forEach((img) => {
-        img.src = img.dataset.src;
-        img.removeAttribute("data-src");
-      });
-    }
+  function initImageFadeIn() {
+    const images = document.querySelectorAll('.card-image img, .single-image img');
+    images.forEach((img) => {
+      if (img.complete && img.naturalHeight > 0) {
+        img.classList.add('is-loaded');
+      } else {
+        img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
+        img.addEventListener('error', () => img.classList.add('is-loaded'), { once: true });
+      }
+    });
   }
 
   // ========================================
@@ -183,6 +162,39 @@ import "../css/front-page.css";
 
     yearElements.forEach((el) => {
       el.textContent = currentYear;
+    });
+  }
+
+  // ========================================
+  // BACK TO TOP
+  // ========================================
+  function initBackToTop() {
+    const backToTop = document.querySelector(".back-to-top");
+    if (!backToTop) return;
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (window.scrollY > 400) {
+          backToTop.hidden = false;
+          requestAnimationFrame(() => backToTop.classList.add("is-visible"));
+        } else {
+          backToTop.classList.remove("is-visible");
+          backToTop.addEventListener(
+            "transitionend",
+            () => {
+              if (!backToTop.classList.contains("is-visible"))
+                backToTop.hidden = true;
+            },
+            { once: true },
+          );
+        }
+      },
+      { passive: true },
+    );
+
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
 
@@ -207,8 +219,9 @@ import "../css/front-page.css";
     initRevealAnimations();
     initStaggerAnimations();
     initSmoothScroll();
-    initLazyLoad();
+    initImageFadeIn();
     setCurrentYear();
+    initBackToTop();
   }
 
   if (document.readyState === "loading") {

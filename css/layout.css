@@ -74,13 +74,19 @@
     overflow: hidden;
     margin-bottom: var(--space-4);
     border: 1px solid var(--border-subtle);
+    background: var(--color-dark-800);
 }
 
 .card-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--transition-slow);
+    transition: transform var(--transition-slow), opacity 0.3s ease;
+    opacity: 0;
+}
+
+.card-image img.is-loaded {
+    opacity: 1;
 }
 
 .card:hover .card-image img {
@@ -301,11 +307,18 @@
     overflow: hidden;
     margin-bottom: var(--space-8);
     border: 1px solid var(--border-subtle);
+    background: var(--color-dark-800);
 }
 
 .single-image img {
     width: 100%;
     height: auto;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.single-image img.is-loaded {
+    opacity: 1;
 }
 
 /* Single post video player */
@@ -347,40 +360,6 @@
     margin-top: var(--space-8);
     padding-top: var(--space-8);
     border-top: 1px solid var(--border-primary);
-}
-
-.single-nav {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-4);
-    margin-top: var(--space-12);
-    padding-top: var(--space-8);
-    border-top: 1px solid var(--border-primary);
-}
-
-.single-nav-label {
-    font-size: var(--text-xs);
-    color: var(--text-faint);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider);
-    font-weight: 600;
-}
-
-.single-nav-link {
-    display: block;
-    font-family: var(--font-display);
-    font-weight: 600;
-    margin-top: var(--space-1);
-    color: var(--text-primary);
-    transition: color var(--transition-fast);
-}
-
-.single-nav-link:hover {
-    color: var(--link-color);
-}
-
-.single-nav-next {
-    text-align: right;
 }
 
 /* ========================================
@@ -446,4 +425,19 @@
     .card-hero .card-title {
         font-size: var(--text-2xl);
     }
+}
+
+/* ========================================
+   RELATED POSTS
+   ======================================== */
+
+.related-posts {
+    margin-top: var(--space-12);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-dark-800);
+}
+.related-posts-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-6);
 }
