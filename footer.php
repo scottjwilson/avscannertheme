@@ -29,6 +29,7 @@ $footer_categories = get_terms([
                         <span class="footer-logo-text"><?php bloginfo('name'); ?></span>
                     <?php endif; ?>
                 </a>
+                <p class="footer-subheading">Community Safety Through Citizen Awareness</p>
                 <p class="footer-tagline"><?php bloginfo('description'); ?></p>
             </div>
 
