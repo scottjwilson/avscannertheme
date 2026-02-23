@@ -10,6 +10,7 @@ get_header(); ?>
 <?php while (have_posts()):
     the_post();
     $fb_image = get_post_meta(get_the_ID(), "_fb_full_picture", true);
+    $fb_video = get_post_meta(get_the_ID(), "_fb_video_url", true);
     $fb_link = get_post_meta(get_the_ID(), "_fb_permalink", true);
     $post_cats = get_the_terms(get_the_ID(), "post_category_type");
     $is_ad     = false;
@@ -41,7 +42,31 @@ get_header(); ?>
             <h1 class="text-display single-title"><?php the_title(); ?></h1>
         </header>
 
-        <?php if ($fb_image): ?>
+        <?php if ($fb_video): ?>
+            <div class="single-video" data-fb-permalink="<?php echo esc_url($fb_link); ?>">
+                <video controls preload="metadata" poster="<?php echo esc_url($fb_image); ?>">
+                    <source src="<?php echo esc_url($fb_video); ?>" type="video/mp4">
+                </video>
+                <div class="single-video-fallback" hidden>
+                    <?php if ($fb_image): ?>
+                        <img src="<?php echo esc_url($fb_image); ?>"
+                             alt="<?php the_title_attribute(); ?>">
+                    <?php endif; ?>
+                    <a href="<?php echo esc_url($fb_link); ?>"
+                       class="btn btn-primary single-video-fallback-btn"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        <?php echo cvw_icon("arrow-up-right", 16); ?> Watch on Facebook
+                    </a>
+                </div>
+            </div>
+            <script>
+            document.querySelector('.single-video source').addEventListener('error', function() {
+                this.closest('.single-video').querySelector('video').hidden = true;
+                this.closest('.single-video').querySelector('.single-video-fallback').hidden = false;
+            });
+            </script>
+        <?php elseif ($fb_image): ?>
             <div class="single-image">
                 <img src="<?php echo esc_url($fb_image); ?>"
                      alt="<?php the_title_attribute(); ?>"

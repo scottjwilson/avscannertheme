@@ -98,7 +98,7 @@
 </header>
 
 <?php if (!is_wp_error($nav_categories) && !empty($nav_categories)):
-    $all_url    = is_front_page() ? home_url('/') : get_post_type_archive_link('fb_post');
+    $all_url    = home_url('/');
     $all_active = is_front_page() || (is_post_type_archive('fb_post') && !is_tax());
 ?>
 <nav class="category-nav" aria-label="<?php esc_attr_e('Categories', 'clean-vite-wp'); ?>">

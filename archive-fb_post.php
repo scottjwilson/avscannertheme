@@ -16,12 +16,17 @@ get_header(); ?>
 
         <?php if (have_posts()): ?>
             <div class="grid grid-3 stagger-children reveal">
-                <?php while (have_posts()):
+                <?php
+                $post_index = 0;
+                while (have_posts()):
                     the_post();
                     get_template_part('template-parts/card-fb-post', null, [
                         'show_time' => true,
+                        'is_hero'   => $post_index === 0,
                     ]);
-                endwhile; ?>
+                    $post_index++;
+                endwhile;
+                ?>
             </div>
 
             <?php the_posts_pagination([

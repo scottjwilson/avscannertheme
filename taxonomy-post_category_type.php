@@ -46,7 +46,7 @@ $term = get_queried_object();
                     esc_html__('No posts found in the "%s" category yet.', 'clean-vite-wp'),
                     esc_html($term->name)
                 ); ?></p>
-                <a href="<?php echo esc_url(get_post_type_archive_link("fb_post")); ?>" class="btn btn-primary">
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-primary">
                     <?php esc_html_e("View All Posts", "clean-vite-wp"); ?>
                 </a>
             </div>

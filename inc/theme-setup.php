@@ -228,11 +228,11 @@ function cvw_taxonomy_query_fb_posts($query): void
 
     if ($query->is_tax("post_category_type")) {
         $query->set("post_type", "fb_post");
-        $query->set("posts_per_page", 9);
+        $query->set("posts_per_page", 12);
     }
 
     if ($query->is_post_type_archive("fb_post")) {
-        $query->set("posts_per_page", 9);
+        $query->set("posts_per_page", 12);
     }
 }
 add_action("pre_get_posts", "cvw_taxonomy_query_fb_posts");
