@@ -29,7 +29,9 @@ $posts_query = new WP_Query([
                 <?php
                 while ($posts_query->have_posts()):
                     $posts_query->the_post();
-                    get_template_part('template-parts/card-fb-post');
+                    get_template_part('template-parts/card-fb-post', null, [
+                        'show_time' => true,
+                    ]);
                 endwhile;
                 ?>
             </div>
