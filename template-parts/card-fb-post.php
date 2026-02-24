@@ -85,6 +85,13 @@ $card_class = "card card-hover" . ($is_ad ? " card-sponsored" : "");
         </div>
     <?php endif; ?>
 
+    <?php $shared_url = get_post_meta(get_the_ID(), '_fb_shared_url', true); ?>
+    <?php if ($shared_url): ?>
+        <span class="card-source">
+            via <?php echo esc_html(wp_parse_url($shared_url, PHP_URL_HOST)); ?>
+        </span>
+    <?php endif; ?>
+
     <h3 class="card-title">
         <a href="<?php the_permalink(); ?>">
             <?php the_title(); ?>

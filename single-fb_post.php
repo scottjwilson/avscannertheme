@@ -88,6 +88,20 @@ get_header(); ?>
             <?php the_content(); ?>
         </div>
 
+        <?php $shared_url = get_post_meta(get_the_ID(), '_fb_shared_url', true); ?>
+        <?php if ($shared_url): ?>
+            <div class="shared-source">
+                <span class="shared-source-label">Shared from</span>
+                <a href="<?php echo esc_url($shared_url); ?>"
+                   class="btn btn-outline"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <?php echo esc_html(wp_parse_url($shared_url, PHP_URL_HOST)); ?>
+                    <?php echo cvw_icon('arrow-up-right', 16); ?>
+                </a>
+            </div>
+        <?php endif; ?>
+
         <?php if ($fb_link): ?>
             <div class="single-fb-link">
                 <a href="<?php echo esc_url($fb_link); ?>"
