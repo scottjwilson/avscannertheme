@@ -5,13 +5,13 @@
  * Outputs automatic SEO defaults via wp_head hooks.
  * Defers to Yoast, RankMath, or All in One SEO if active.
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 /**
  * Check if a known SEO plugin is active.
  */
-function cvw_seo_plugin_active(): bool {
+function avs_seo_plugin_active(): bool {
     return defined('WPSEO_VERSION')       // Yoast
         || defined('RANK_MATH_VERSION')   // RankMath
         || defined('AIOSEO_VERSION');     // All in One SEO
@@ -20,8 +20,8 @@ function cvw_seo_plugin_active(): bool {
 /**
  * Output meta description tag.
  */
-function cvw_meta_description(): void {
-    if (cvw_seo_plugin_active()) return;
+function avs_meta_description(): void {
+    if (avs_seo_plugin_active()) return;
 
     $desc = '';
     if (is_singular('fb_post')) {
@@ -44,15 +44,15 @@ function cvw_meta_description(): void {
         printf('<meta name="description" content="%s">' . "\n", esc_attr($desc));
     }
 }
-add_action('wp_head', 'cvw_meta_description', 1);
+add_action('wp_head', 'avs_meta_description', 1);
 
 /**
  * Output canonical URL for non-singular pages.
  *
  * WordPress handles singular canonical via rel_canonical().
  */
-function cvw_canonical_url(): void {
-    if (cvw_seo_plugin_active()) return;
+function avs_canonical_url(): void {
+    if (avs_seo_plugin_active()) return;
     if (is_singular()) return;
 
     $url = '';
@@ -70,13 +70,13 @@ function cvw_canonical_url(): void {
         printf('<link rel="canonical" href="%s">' . "\n", esc_url($url));
     }
 }
-add_action('wp_head', 'cvw_canonical_url', 1);
+add_action('wp_head', 'avs_canonical_url', 1);
 
 /**
  * Output Open Graph meta tags.
  */
-function cvw_open_graph(): void {
-    if (cvw_seo_plugin_active()) return;
+function avs_open_graph(): void {
+    if (avs_seo_plugin_active()) return;
 
     $og = [
         'og:site_name' => get_bloginfo('name'),
@@ -112,13 +112,13 @@ function cvw_open_graph(): void {
         }
     }
 }
-add_action('wp_head', 'cvw_open_graph', 2);
+add_action('wp_head', 'avs_open_graph', 2);
 
 /**
  * Output Twitter Card meta tags.
  */
-function cvw_twitter_card(): void {
-    if (cvw_seo_plugin_active()) return;
+function avs_twitter_card(): void {
+    if (avs_seo_plugin_active()) return;
 
     $card = ['twitter:card' => 'summary_large_image'];
 
@@ -141,13 +141,13 @@ function cvw_twitter_card(): void {
         }
     }
 }
-add_action('wp_head', 'cvw_twitter_card', 2);
+add_action('wp_head', 'avs_twitter_card', 2);
 
 /**
  * Output JSON-LD structured data.
  */
-function cvw_json_ld(): void {
-    if (cvw_seo_plugin_active()) return;
+function avs_json_ld(): void {
+    if (avs_seo_plugin_active()) return;
 
     $schemas = [];
 
@@ -214,4 +214,4 @@ function cvw_json_ld(): void {
         echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
     }
 }
-add_action('wp_head', 'cvw_json_ld', 5);
+add_action('wp_head', 'avs_json_ld', 5);

@@ -5,7 +5,7 @@
  * Shows a category-specific header then reuses the shared card grid
  * from archive-fb_post.php.
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 get_header();
@@ -16,7 +16,7 @@ $term = get_queried_object();
 <section class="section">
     <div class="container">
         <div class="section-header">
-            <span class="text-label"><?php esc_html_e("News Category", "clean-vite-wp"); ?></span>
+            <span class="text-label"><?php esc_html_e("News Category", "avscannertheme"); ?></span>
             <h1 class="text-display"><?php echo esc_html($term->name); ?></h1>
             <?php if ($term->description): ?>
                 <p class="section-description"><?php echo esc_html($term->description); ?></p>
@@ -41,14 +41,14 @@ $term = get_queried_object();
 
         <?php else: ?>
             <div class="empty-state">
-                <?php echo cvw_empty_state_svg('no-posts'); ?>
-                <h2 class="text-display"><?php esc_html_e("No Posts Found", "clean-vite-wp"); ?></h2>
+                <?php echo avs_empty_state_svg('no-posts'); ?>
+                <h2 class="text-display"><?php esc_html_e("No Posts Found", "avscannertheme"); ?></h2>
                 <p><?php printf(
-                    esc_html__('No posts found in the "%s" category yet.', 'clean-vite-wp'),
+                    esc_html__('No posts found in the "%s" category yet.', 'avscannertheme'),
                     esc_html($term->name)
                 ); ?></p>
                 <a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-primary">
-                    <?php esc_html_e("View All Posts", "clean-vite-wp"); ?>
+                    <?php esc_html_e("View All Posts", "avscannertheme"); ?>
                 </a>
             </div>
         <?php endif; ?>

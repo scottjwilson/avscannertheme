@@ -2,7 +2,7 @@
 /**
  * Single Post Template
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 get_header(); ?>
@@ -39,7 +39,7 @@ get_header(); ?>
             ?>
             <div>
                 <?php if ($prev): ?>
-                    <span class="single-nav-label"><?php esc_html_e("Previous", "clean-vite-wp"); ?></span>
+                    <span class="single-nav-label"><?php esc_html_e("Previous", "avscannertheme"); ?></span>
                     <a href="<?php echo get_permalink($prev); ?>" class="single-nav-link">
                         <?php echo esc_html($prev->post_title); ?>
                     </a>
@@ -47,7 +47,7 @@ get_header(); ?>
             </div>
             <div class="single-nav-next">
                 <?php if ($next): ?>
-                    <span class="single-nav-label"><?php esc_html_e("Next", "clean-vite-wp"); ?></span>
+                    <span class="single-nav-label"><?php esc_html_e("Next", "avscannertheme"); ?></span>
                     <a href="<?php echo get_permalink($next); ?>" class="single-nav-link">
                         <?php echo esc_html($next->post_title); ?>
                     </a>

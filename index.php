@@ -2,7 +2,7 @@
 /**
  * Main Template File
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 get_header(); ?>
@@ -38,8 +38,8 @@ get_header(); ?>
                         <a href="<?php the_permalink(); ?>" class="card-link">
                             <?php esc_html_e(
                                 "Read more",
-                                "clean-vite-wp",
-                            ); ?> <?php echo cvw_icon("arrow-right", 16); ?>
+                                "avscannertheme",
+                            ); ?> <?php echo avs_icon("arrow-right", 16); ?>
                         </a>
                     </article>
                 <?php
@@ -50,20 +50,20 @@ get_header(); ?>
 
         <?php else: ?>
             <div class="empty-state">
-                <?php echo cvw_empty_state_svg('not-found'); ?>
+                <?php echo avs_empty_state_svg('not-found'); ?>
                 <h2 class="text-display"><?php esc_html_e(
                     "Nothing Found",
-                    "clean-vite-wp",
+                    "avscannertheme",
                 ); ?></h2>
                 <p><?php esc_html_e(
                     "We couldn't find what you're looking for.",
-                    "clean-vite-wp",
+                    "avscannertheme",
                 ); ?></p>
                 <a href="<?php echo esc_url(
                     home_url("/"),
                 ); ?>" class="btn btn-primary"><?php esc_html_e(
     "Back to Home",
-    "clean-vite-wp",
+    "avscannertheme",
 ); ?></a>
             </div>
         <?php endif; ?>

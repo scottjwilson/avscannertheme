@@ -2,7 +2,7 @@
 /**
  * Default Page Template
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 get_header(); ?>

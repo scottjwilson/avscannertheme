@@ -1,8 +1,8 @@
 <?php
 /**
- * Clean Vite WP - Theme Functions
+ * AVScannerTheme - Theme Functions
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 // Theme setup: menus, supports, and base assets

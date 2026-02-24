@@ -2,7 +2,7 @@
 /**
  * Front Page Template — displays all scanner posts.
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 get_header();
@@ -20,7 +20,7 @@ $posts_query = new WP_Query([
 <section class="section">
     <div class="container">
         <div class="section-header">
-            <span class="text-label"><?php esc_html_e("Scanner Posts", "clean-vite-wp"); ?></span>
+            <span class="text-label"><?php esc_html_e("Scanner Posts", "avscannertheme"); ?></span>
             <h1 class="text-display"><?php bloginfo('name'); ?></h1>
         </div>
 
@@ -55,9 +55,9 @@ $posts_query = new WP_Query([
 
         <?php else: ?>
             <div class="empty-state">
-                <?php echo cvw_empty_state_svg('no-posts'); ?>
-                <h2 class="text-display"><?php esc_html_e("No Posts Found", "clean-vite-wp"); ?></h2>
-                <p><?php esc_html_e("There are no scanner posts to display yet.", "clean-vite-wp"); ?></p>
+                <?php echo avs_empty_state_svg('no-posts'); ?>
+                <h2 class="text-display"><?php esc_html_e("No Posts Found", "avscannertheme"); ?></h2>
+                <p><?php esc_html_e("There are no scanner posts to display yet.", "avscannertheme"); ?></p>
             </div>
         <?php endif; ?>
     </div>

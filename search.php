@@ -2,7 +2,7 @@
 /**
  * Search Results Template
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 get_header(); ?>
@@ -10,11 +10,11 @@ get_header(); ?>
 <section class="section">
     <div class="container">
         <div class="section-header">
-            <span class="text-label"><?php esc_html_e("Search Results", "clean-vite-wp"); ?></span>
+            <span class="text-label"><?php esc_html_e("Search Results", "avscannertheme"); ?></span>
             <h1 class="text-display">
                 <?php printf(
                     /* translators: %s: search query */
-                    esc_html__('Results for "%s"', "clean-vite-wp"),
+                    esc_html__('Results for "%s"', "avscannertheme"),
                     get_search_query(),
                 ); ?>
             </h1>
@@ -22,7 +22,7 @@ get_header(); ?>
                 <p class="text-muted">
                     <?php printf(
                         /* translators: %s: number of results */
-                        esc_html(_n('%s post found', '%s posts found', (int) $wp_query->found_posts, 'clean-vite-wp')),
+                        esc_html(_n('%s post found', '%s posts found', (int) $wp_query->found_posts, 'avscannertheme')),
                         number_format_i18n($wp_query->found_posts),
                     ); ?>
                 </p>
@@ -47,11 +47,11 @@ get_header(); ?>
 
         <?php else: ?>
             <div class="empty-state">
-                <?php echo cvw_empty_state_svg('no-results'); ?>
-                <h2 class="text-display"><?php esc_html_e("No Results Found", "clean-vite-wp"); ?></h2>
-                <p><?php esc_html_e("No scanner posts matched your search. Try a different term.", "clean-vite-wp"); ?></p>
+                <?php echo avs_empty_state_svg('no-results'); ?>
+                <h2 class="text-display"><?php esc_html_e("No Results Found", "avscannertheme"); ?></h2>
+                <p><?php esc_html_e("No scanner posts matched your search. Try a different term.", "avscannertheme"); ?></p>
                 <a href="<?php echo esc_url(home_url("/")); ?>" class="btn btn-primary">
-                    <?php esc_html_e("Back to Home", "clean-vite-wp"); ?>
+                    <?php esc_html_e("Back to Home", "avscannertheme"); ?>
                 </a>
             </div>
         <?php endif; ?>

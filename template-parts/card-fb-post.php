@@ -5,7 +5,7 @@
  * Args (via get_template_part $args):
  *   show_time (bool)  — append time to date display (default false)
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 $show_time = !empty($args["show_time"]);
@@ -101,7 +101,7 @@ $card_class = "card card-hover" . ($is_ad ? " card-sponsored" : "");
     <p class="card-text"><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
 
     <a href="<?php the_permalink(); ?>" class="card-link">
-        <?php esc_html_e("Read more", "clean-vite-wp"); ?> <?php echo cvw_icon(
+        <?php esc_html_e("Read more", "avscannertheme"); ?> <?php echo avs_icon(
      "arrow-right",
      16,
  ); ?>

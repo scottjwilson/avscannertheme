@@ -8,7 +8,7 @@ import "../css/search.css";
 import "../css/front-page.css";
 
 /**
- * Clean Vite WP
+ * AVScannerTheme
  * Main JavaScript
  */
 

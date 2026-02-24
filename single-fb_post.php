@@ -2,7 +2,7 @@
 /**
  * Single Template: Scanner Post (fb_post)
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 get_header(); ?>
@@ -59,7 +59,7 @@ get_header(); ?>
                        class="btn btn-primary single-video-fallback-btn"
                        target="_blank"
                        rel="noopener noreferrer">
-                        <?php echo cvw_icon("arrow-up-right", 16); ?> Watch on Facebook
+                        <?php echo avs_icon("arrow-up-right", 16); ?> Watch on Facebook
                     </a>
                 </div>
             </div>
@@ -97,7 +97,7 @@ get_header(); ?>
                    target="_blank"
                    rel="noopener noreferrer">
                     <?php echo esc_html(wp_parse_url($shared_url, PHP_URL_HOST)); ?>
-                    <?php echo cvw_icon('arrow-up-right', 16); ?>
+                    <?php echo avs_icon('arrow-up-right', 16); ?>
                 </a>
             </div>
         <?php endif; ?>
@@ -108,7 +108,7 @@ get_header(); ?>
                    class="btn btn-outline"
                    target="_blank"
                    rel="noopener noreferrer">
-                    <?php esc_html_e("View on Facebook", "clean-vite-wp"); ?> <?php echo cvw_icon("arrow-up-right", 16); ?>
+                    <?php esc_html_e("View on Facebook", "avscannertheme"); ?> <?php echo avs_icon("arrow-up-right", 16); ?>
                 </a>
             </div>
         <?php endif; ?>

@@ -1,11 +1,11 @@
 <?php
 /**
- * Clean Vite WP - Vite Integration
+ * AVScannerTheme - Vite Integration
  *
  * Handles Vite dev server detection and asset loading for both
  * development (HMR) and production (manifest-based) environments.
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 /**
@@ -13,7 +13,7 @@
  *
  * @return array{running: bool, base: string, server: string}
  */
-function cvw_detect_vite_server(): array
+function avs_detect_vite_server(): array
 {
     $vite_server = "http://localhost:3000";
 
@@ -75,7 +75,7 @@ function cvw_detect_vite_server(): array
  *
  * @return bool
  */
-function cvw_is_local_environment(): bool
+function avs_is_local_environment(): bool
 {
     $home_url = home_url();
     return strpos($home_url, "localhost") !== false ||
@@ -87,11 +87,11 @@ function cvw_is_local_environment(): bool
 /**
  * Output Vite client scripts in head for HMR
  */
-function cvw_output_vite_scripts(): void
+function avs_output_vite_scripts(): void
 {
-    $vite = cvw_detect_vite_server();
+    $vite = avs_detect_vite_server();
 
-    if (!$vite["running"] && !cvw_is_local_environment()) {
+    if (!$vite["running"] && !avs_is_local_environment()) {
         return;
     }
 
@@ -108,14 +108,14 @@ function cvw_output_vite_scripts(): void
         '"></script>' .
         "\n";
 }
-add_action("wp_head", "cvw_output_vite_scripts", 1);
+add_action("wp_head", "avs_output_vite_scripts", 1);
 
 /**
  * Load Vite assets from manifest in production
  */
-function cvw_load_vite_production_assets(): void
+function avs_load_vite_production_assets(): void
 {
-    $vite = cvw_detect_vite_server();
+    $vite = avs_detect_vite_server();
 
     if ($vite["running"]) {
         return;
@@ -162,7 +162,7 @@ function cvw_load_vite_production_assets(): void
         true,
     );
 }
-add_action("wp_enqueue_scripts", "cvw_load_vite_production_assets", 100);
+add_action("wp_enqueue_scripts", "avs_load_vite_production_assets", 100);
 
 /**
  * Add type="module" attribute to Vite scripts
@@ -172,7 +172,7 @@ add_action("wp_enqueue_scripts", "cvw_load_vite_production_assets", 100);
  * @param string $src    Script source URL
  * @return string Modified script tag
  */
-function cvw_vite_script_module_type(
+function avs_vite_script_module_type(
     string $tag,
     string $handle,
     string $src,
@@ -190,4 +190,4 @@ function cvw_vite_script_module_type(
 
     return str_replace("<script ", '<script type="module" ', $tag);
 }
-add_filter("script_loader_tag", "cvw_vite_script_module_type", 10, 3);
+add_filter("script_loader_tag", "avs_vite_script_module_type", 10, 3);

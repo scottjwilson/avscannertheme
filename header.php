@@ -43,30 +43,30 @@
             <!-- Header Search (full width) -->
             <form role="search" method="get" class="header-search" action="<?php echo esc_url(home_url('/')); ?>">
                 <input type="search" class="search-input" name="s"
-                       placeholder="<?php esc_attr_e('Search posts...', 'clean-vite-wp'); ?>"
+                       placeholder="<?php esc_attr_e('Search posts...', 'avscannertheme'); ?>"
                        value="<?php echo get_search_query(); ?>" autocomplete="off">
                 <input type="hidden" name="post_type" value="fb_post">
-                <button type="submit" class="search-submit" aria-label="<?php esc_attr_e('Search', 'clean-vite-wp'); ?>">
-                    <?php echo cvw_icon('search', 18); ?>
+                <button type="submit" class="search-submit" aria-label="<?php esc_attr_e('Search', 'avscannertheme'); ?>">
+                    <?php echo avs_icon('search', 18); ?>
                 </button>
             </form>
 
             <!-- Theme Toggle -->
-            <button class="theme-toggle" aria-label="<?php esc_attr_e('Toggle theme', 'clean-vite-wp'); ?>">
-                <span class="icon-sun"><?php echo cvw_icon('sun', 20); ?></span>
-                <span class="icon-moon"><?php echo cvw_icon('moon', 20); ?></span>
+            <button class="theme-toggle" aria-label="<?php esc_attr_e('Toggle theme', 'avscannertheme'); ?>">
+                <span class="icon-sun"><?php echo avs_icon('sun', 20); ?></span>
+                <span class="icon-moon"><?php echo avs_icon('moon', 20); ?></span>
             </button>
 
             <!-- Mobile Menu Toggle -->
             <button class="menu-toggle" aria-expanded="false" aria-label="<?php esc_attr_e(
                 "Toggle menu",
-                "clean-vite-wp",
+                "avscannertheme",
             ); ?>">
-                <span class="icon-menu"><?php echo cvw_icon(
+                <span class="icon-menu"><?php echo avs_icon(
                     "menu",
                     24,
                 ); ?></span>
-                <span class="icon-close"><?php echo cvw_icon(
+                <span class="icon-close"><?php echo avs_icon(
                     "close",
                     24,
                 ); ?></span>
@@ -94,7 +94,7 @@
 
         <?php if (!is_wp_error($nav_categories) && !empty($nav_categories)): ?>
             <div class="nav-mobile-categories">
-                <span class="nav-mobile-label"><?php esc_html_e('Categories', 'clean-vite-wp'); ?></span>
+                <span class="nav-mobile-label"><?php esc_html_e('Categories', 'avscannertheme'); ?></span>
                 <?php foreach ($nav_categories as $cat): ?>
                     <a href="<?php echo esc_url(get_term_link($cat)); ?>"
                        class="badge badge-<?php echo esc_attr($cat->slug); ?>">
@@ -110,12 +110,12 @@
     $all_url    = home_url('/');
     $all_active = is_front_page() || (is_post_type_archive('fb_post') && !is_tax());
 ?>
-<nav class="category-nav" aria-label="<?php esc_attr_e('Categories', 'clean-vite-wp'); ?>">
+<nav class="category-nav" aria-label="<?php esc_attr_e('Categories', 'avscannertheme'); ?>">
     <div class="container">
         <div class="category-nav-scroll">
             <a href="<?php echo esc_url($all_url); ?>"
                class="cat-link <?php echo $all_active ? 'is-active' : ''; ?>">
-                <?php esc_html_e('All', 'clean-vite-wp'); ?>
+                <?php esc_html_e('All', 'avscannertheme'); ?>
             </a>
             <?php foreach ($nav_categories as $cat):
                 $is_active = is_tax('post_category_type', $cat->slug);

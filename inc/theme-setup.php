@@ -1,10 +1,10 @@
 <?php
 /**
- * Clean Vite WP - Theme Setup
+ * AVScannerTheme - Theme Setup
  *
  * Core theme configuration, menus, and theme supports.
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 defined("ABSPATH") || exit();
@@ -16,7 +16,7 @@ define("CVW_URI", get_template_directory_uri());
 /**
  * Register theme supports and navigation menus
  */
-function cvw_setup(): void
+function avs_setup(): void
 {
     add_theme_support("automatic-feed-links");
     add_theme_support("title-tag");
@@ -40,22 +40,22 @@ function cvw_setup(): void
     add_image_size("cvw-card", 600, 400, true);
 
     register_nav_menus([
-        "primary" => __("Primary Menu", "clean-vite-wp"),
-        "footer" => __("Footer Menu", "clean-vite-wp"),
+        "primary" => __("Primary Menu", "avscannertheme"),
+        "footer" => __("Footer Menu", "avscannertheme"),
     ]);
 }
-add_action("after_setup_theme", "cvw_setup");
+add_action("after_setup_theme", "avs_setup");
 
 /**
  * Enqueue base styles and scripts
  */
-function cvw_enqueue_assets(): void
+function avs_enqueue_assets(): void
 {
     wp_enqueue_style("cvw-style", get_stylesheet_uri(), [], CVW_VERSION);
 
     // Check if Vite handles assets
-    if (function_exists("cvw_detect_vite_server")) {
-        $vite = cvw_detect_vite_server();
+    if (function_exists("avs_detect_vite_server")) {
+        $vite = avs_detect_vite_server();
         $has_manifest = file_exists(get_theme_file_path("dist/.vite/manifest.json"))
             || file_exists(get_theme_file_path("dist/manifest.json"));
 
@@ -133,21 +133,21 @@ function cvw_enqueue_assets(): void
         true,
     );
 }
-add_action("wp_enqueue_scripts", "cvw_enqueue_assets");
+add_action("wp_enqueue_scripts", "avs_enqueue_assets");
 
 /**
  * Custom excerpt length
  */
-function cvw_excerpt_length(int $length): int
+function avs_excerpt_length(int $length): int
 {
     return 20;
 }
-add_filter("excerpt_length", "cvw_excerpt_length", 999);
+add_filter("excerpt_length", "avs_excerpt_length", 999);
 
 /**
  * SVG Icons Library
  */
-function cvw_icon($name, $size = 20): string
+function avs_icon($name, $size = 20): string
 {
     $icons = [
         "arrow-right" =>
@@ -239,7 +239,7 @@ function cvw_icon($name, $size = 20): string
  * WordPress defaults taxonomy archives to the "post" type even when the
  * taxonomy is registered against a custom post type.
  */
-function cvw_taxonomy_query_fb_posts($query): void
+function avs_taxonomy_query_fb_posts($query): void
 {
     if (is_admin() || !$query->is_main_query()) {
         return;
@@ -254,20 +254,20 @@ function cvw_taxonomy_query_fb_posts($query): void
         $query->set("posts_per_page", 12);
     }
 }
-add_action("pre_get_posts", "cvw_taxonomy_query_fb_posts");
+add_action("pre_get_posts", "avs_taxonomy_query_fb_posts");
 
 /**
  * Explicitly declare thumbnail support for fb_post CPT
  */
-function cvw_post_type_supports(): void {
+function avs_post_type_supports(): void {
     add_post_type_support('fb_post', 'thumbnail');
 }
-add_action('init', 'cvw_post_type_supports');
+add_action('init', 'avs_post_type_supports');
 
 /**
  * Scope search results to fb_post only.
  */
-function cvw_search_query_fb_posts($query): void
+function avs_search_query_fb_posts($query): void
 {
     if (is_admin() || !$query->is_main_query()) {
         return;
@@ -278,26 +278,26 @@ function cvw_search_query_fb_posts($query): void
         $query->set("posts_per_page", 9);
     }
 }
-add_action("pre_get_posts", "cvw_search_query_fb_posts");
+add_action("pre_get_posts", "avs_search_query_fb_posts");
 
 /**
  * Body Classes
  */
-function cvw_body_classes($classes): array
+function avs_body_classes($classes): array
 {
     if (is_front_page()) {
         $classes[] = "is-front-page";
     }
     return $classes;
 }
-add_filter("body_class", "cvw_body_classes");
+add_filter("body_class", "avs_body_classes");
 
 /**
  * Empty State SVG Illustrations
  *
  * Returns context-specific inline SVGs using currentColor for theming.
  */
-function cvw_empty_state_svg(string $type = 'no-posts'): string
+function avs_empty_state_svg(string $type = 'no-posts'): string
 {
     switch ($type) {
         case 'no-posts':

@@ -36,7 +36,7 @@ $footer_categories = get_terms([
             <!-- Categories Column -->
             <?php if (!is_wp_error($footer_categories) && !empty($footer_categories)): ?>
                 <div class="footer-col">
-                    <h4 class="footer-heading"><?php esc_html_e('Categories', 'clean-vite-wp'); ?></h4>
+                    <h4 class="footer-heading"><?php esc_html_e('Categories', 'avscannertheme'); ?></h4>
                     <ul class="footer-cat-list">
                         <?php foreach ($footer_categories as $cat): ?>
                             <li>
@@ -54,7 +54,7 @@ $footer_categories = get_terms([
             <!-- Links Column -->
             <?php if (has_nav_menu('footer')): ?>
                 <div class="footer-col">
-                    <h4 class="footer-heading"><?php esc_html_e('Links', 'clean-vite-wp'); ?></h4>
+                    <h4 class="footer-heading"><?php esc_html_e('Links', 'avscannertheme'); ?></h4>
                     <?php wp_nav_menu([
                         'theme_location' => 'footer',
                         'container' => false,
@@ -70,9 +70,9 @@ $footer_categories = get_terms([
             <p>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?></p>
             <div class="footer-links">
                 <?php if (get_privacy_policy_url()): ?>
-                    <a href="<?php echo esc_url(get_privacy_policy_url()); ?>"><?php esc_html_e('Privacy Policy', 'clean-vite-wp'); ?></a>
+                    <a href="<?php echo esc_url(get_privacy_policy_url()); ?>"><?php esc_html_e('Privacy Policy', 'avscannertheme'); ?></a>
                 <?php endif; ?>
-                <a href="<?php echo esc_url(home_url('/feed/')); ?>"><?php esc_html_e('RSS Feed', 'clean-vite-wp'); ?></a>
+                <a href="<?php echo esc_url(home_url('/feed/')); ?>"><?php esc_html_e('RSS Feed', 'avscannertheme'); ?></a>
             </div>
         </div>
     </div>
@@ -89,7 +89,7 @@ $footer_categories = get_terms([
 </template>
 
 <button class="back-to-top" aria-label="Back to top" hidden>
-    <?php echo cvw_icon('arrow-up', 20); ?>
+    <?php echo avs_icon('arrow-up', 20); ?>
 </button>
 
 <?php wp_footer(); ?>

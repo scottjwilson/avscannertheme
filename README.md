@@ -1,4 +1,4 @@
-# Clean Vite WP
+# AVScannerTheme
 
 A minimal WordPress theme starter with Vite for modern frontend development.
 
@@ -51,7 +51,7 @@ This generates a `dist/` directory with:
 ## Project Structure
 
 ```
-clean-vite-wp/
+avscannertheme/
 ├── css/
 │   ├── variables.css      # CSS custom properties
 │   ├── base.css           # Base/reset styles

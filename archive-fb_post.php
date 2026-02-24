@@ -2,7 +2,7 @@
 /**
  * Archive Template: Scanner Posts (fb_post)
  *
- * @package Clean_Vite_WP
+ * @package AVScannerTheme
  */
 
 get_header(); ?>
@@ -10,7 +10,7 @@ get_header(); ?>
 <section class="section">
     <div class="container">
         <div class="section-header">
-            <span class="text-label"><?php esc_html_e("Scanner Posts", "clean-vite-wp"); ?></span>
+            <span class="text-label"><?php esc_html_e("Scanner Posts", "avscannertheme"); ?></span>
             <h1 class="text-display"><?php post_type_archive_title(); ?></h1>
         </div>
 
@@ -37,11 +37,11 @@ get_header(); ?>
 
         <?php else: ?>
             <div class="empty-state">
-                <?php echo cvw_empty_state_svg('no-posts'); ?>
-                <h2 class="text-display"><?php esc_html_e("No Posts Found", "clean-vite-wp"); ?></h2>
-                <p><?php esc_html_e("There are no scanner posts to display yet.", "clean-vite-wp"); ?></p>
+                <?php echo avs_empty_state_svg('no-posts'); ?>
+                <h2 class="text-display"><?php esc_html_e("No Posts Found", "avscannertheme"); ?></h2>
+                <p><?php esc_html_e("There are no scanner posts to display yet.", "avscannertheme"); ?></p>
                 <a href="<?php echo esc_url(home_url("/")); ?>" class="btn btn-primary">
-                    <?php esc_html_e("Back to Home", "clean-vite-wp"); ?>
+                    <?php esc_html_e("Back to Home", "avscannertheme"); ?>
                 </a>
             </div>
         <?php endif; ?>
