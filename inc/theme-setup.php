@@ -272,6 +272,20 @@ function avs_icon($name, $size = 20): string
 }
 
 /**
+ * Prime post meta cache in a single query for all posts in the result set.
+ *
+ * Prevents N individual get_post_meta() calls on card grids
+ * (e.g. _fb_full_picture, _fb_video_url, _fb_permalink, _fb_shared_url).
+ */
+function avs_prime_post_meta_cache(array $posts, WP_Query $query): array {
+    if (empty($posts) || is_admin()) return $posts;
+    $ids = wp_list_pluck($posts, 'ID');
+    update_post_meta_cache($ids);
+    return $posts;
+}
+add_filter('the_posts', 'avs_prime_post_meta_cache', 10, 2);
+
+/**
  * Include fb_post in taxonomy archive queries.
  *
  * WordPress defaults taxonomy archives to the "post" type even when the
@@ -304,6 +318,7 @@ add_action('init', 'avs_post_type_supports');
 
 /**
  * Scope search results to fb_post only.
+ * Also set the default RSS feed to return fb_post items.
  */
 function avs_search_query_fb_posts($query): void
 {
@@ -314,6 +329,10 @@ function avs_search_query_fb_posts($query): void
     if ($query->is_search()) {
         $query->set("post_type", "fb_post");
         $query->set("posts_per_page", 9);
+    }
+
+    if ($query->is_feed()) {
+        $query->set("post_type", "fb_post");
     }
 }
 add_action("pre_get_posts", "avs_search_query_fb_posts");
@@ -380,4 +399,120 @@ function avs_empty_state_svg(string $type = 'no-posts'): string
         default:
             return '';
     }
+}
+
+/**
+ * Register the media: XML namespace for RSS feeds.
+ */
+function avs_rss2_ns(): void {
+    echo 'xmlns:media="http://search.yahoo.com/mrss/"' . "\n";
+}
+add_action('rss2_ns', 'avs_rss2_ns');
+
+/**
+ * Add featured image as <enclosure> and <media:content> to RSS feed items.
+ */
+function avs_rss2_item(): void {
+    $thumb_id = get_post_thumbnail_id();
+    if (!$thumb_id) return;
+
+    $url  = wp_get_attachment_image_url($thumb_id, 'cvw-hero');
+    $meta = wp_get_attachment_metadata($thumb_id);
+    if (!$url) return;
+
+    $type = get_post_mime_type($thumb_id) ?: 'image/jpeg';
+    $file = get_attached_file($thumb_id);
+    $size = $file && file_exists($file) ? filesize($file) : 0;
+
+    echo '<enclosure url="' . esc_url($url) . '" length="' . (int) $size . '" type="' . esc_attr($type) . '" />' . "\n";
+    echo '<media:content url="' . esc_url($url) . '" medium="image"';
+    if (!empty($meta['width']))  echo ' width="' . (int) $meta['width'] . '"';
+    if (!empty($meta['height'])) echo ' height="' . (int) $meta['height'] . '"';
+    echo ' />' . "\n";
+}
+add_action('rss2_item', 'avs_rss2_item');
+
+/**
+ * Render visible breadcrumb navigation.
+ */
+function avs_breadcrumbs(): void {
+    $items = [];
+    $items[] = '<li><a href="' . esc_url(home_url('/')) . '">Home</a></li>';
+
+    if (is_singular('fb_post')) {
+        $terms = get_the_terms(get_the_ID(), 'post_category_type');
+        if ($terms && !is_wp_error($terms)) {
+            // Pick first non-ad category
+            $cat = null;
+            foreach ($terms as $t) {
+                if ($t->slug !== 'advertisement') {
+                    $cat = $t;
+                    break;
+                }
+            }
+            if ($cat) {
+                $items[] = '<li><a href="' . esc_url(get_term_link($cat)) . '">' . esc_html($cat->name) . '</a></li>';
+            }
+        }
+        $items[] = '<li><span aria-current="page">' . esc_html(get_the_title()) . '</span></li>';
+    } elseif (is_tax('post_category_type')) {
+        $term = get_queried_object();
+        $items[] = '<li><span aria-current="page">' . esc_html($term->name) . '</span></li>';
+    } elseif (is_search()) {
+        $items[] = '<li><span aria-current="page">Search results</span></li>';
+    }
+
+    echo '<nav class="breadcrumbs" aria-label="Breadcrumb"><ol>' . implode('', $items) . '</ol></nav>';
+}
+
+/**
+ * TEMPORARY: Delete All Posts admin page for testing.
+ */
+function avs_delete_all_posts_menu(): void {
+    add_management_page(
+        'Delete All Posts',
+        'Delete All Posts',
+        'manage_options',
+        'avs-delete-all-posts',
+        'avs_delete_all_posts_page'
+    );
+}
+add_action('admin_menu', 'avs_delete_all_posts_menu');
+
+function avs_delete_all_posts_page(): void {
+    if (!current_user_can('manage_options')) return;
+
+    $deleted = 0;
+    if (isset($_POST['avs_delete_all']) && check_admin_referer('avs_delete_all_posts')) {
+        $posts = get_posts([
+            'post_type'      => 'fb_post',
+            'posts_per_page' => -1,
+            'post_status'    => 'any',
+            'fields'         => 'ids',
+        ]);
+        foreach ($posts as $id) {
+            wp_delete_post($id, true);
+            $deleted++;
+        }
+    }
+
+    $count = wp_count_posts('fb_post');
+    $total = ($count->publish ?? 0) + ($count->draft ?? 0) + ($count->pending ?? 0) + ($count->private ?? 0) + ($count->trash ?? 0);
+    ?>
+    <div class="wrap">
+        <h1>Delete All Posts</h1>
+        <?php if ($deleted): ?>
+            <div class="notice notice-success"><p>Deleted <?php echo (int) $deleted; ?> posts.</p></div>
+        <?php endif; ?>
+        <p>There are currently <strong><?php echo (int) $total; ?></strong> fb_post entries.</p>
+        <form method="post">
+            <?php wp_nonce_field('avs_delete_all_posts'); ?>
+            <p>This will <strong>permanently delete</strong> all fb_post posts (bypasses trash).</p>
+            <button type="submit" name="avs_delete_all" value="1" class="button button-primary"
+                    onclick="return confirm('Are you sure? This will permanently delete ALL fb_post posts.');">
+                Delete All fb_post Posts
+            </button>
+        </form>
+    </div>
+    <?php
 }

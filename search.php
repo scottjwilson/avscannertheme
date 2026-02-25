@@ -10,6 +10,7 @@ get_header(); ?>
 <section class="section">
     <div class="container">
         <div class="section-header">
+            <?php avs_breadcrumbs(); ?>
             <span class="text-label"><?php esc_html_e("Search Results", "avscannertheme"); ?></span>
             <h1 class="text-display">
                 <?php printf(

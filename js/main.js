@@ -15,6 +15,14 @@ import "../css/front-page.css";
 (function () {
   "use strict";
 
+  function logError(context, error) {
+    console.error(`[AVScanner] ${context}:`, error);
+  }
+
+  window.addEventListener("unhandledrejection", (e) => {
+    logError("unhandled-promise", e.reason);
+  });
+
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ========================================
@@ -448,6 +456,7 @@ import "../css/front-page.css";
           // Trigger image fade-in for new cards
           initImageFadeIn();
         } catch (err) {
+          logError("infinite-scroll", err);
           skeletons.forEach((s) => s.remove());
           loadMoreBtn.hidden = false;
           status.hidden = false;
@@ -542,6 +551,7 @@ import "../css/front-page.css";
         activeIndex = -1;
       } catch (err) {
         if (err.name === "AbortError") return;
+        logError("inline-search", err);
         hideDropdown();
       }
     }

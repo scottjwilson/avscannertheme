@@ -7,6 +7,9 @@
     <script>
         (function(){var t=localStorage.getItem('cvw-theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t;document.querySelector('meta[name="color-scheme"]').content=t;}})();
     </script>
+    <link rel="icon" href="<?php echo esc_url(CVW_URI . '/images/favicon.svg'); ?>" type="image/svg+xml">
+    <link rel="manifest" href="<?php echo esc_url(CVW_URI . '/manifest.webmanifest'); ?>">
+    <meta name="theme-color" content="#dc2626">
     <?php wp_head(); ?>
 </head>
 

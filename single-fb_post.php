@@ -24,6 +24,7 @@ get_header(); ?>
 
 <article class="section">
     <div class="container" style="max-width: 800px;">
+        <?php avs_breadcrumbs(); ?>
         <header class="single-header">
             <?php if ($post_cats && !is_wp_error($post_cats)): ?>
                 <div class="card-badges mb-4">

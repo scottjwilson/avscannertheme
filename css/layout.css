@@ -360,6 +360,44 @@
 }
 
 /* ========================================
+   BREADCRUMBS
+   ======================================== */
+
+.breadcrumbs {
+    margin-bottom: var(--space-4);
+}
+
+.breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    padding: 0;
+    margin: 0;
+}
+
+.breadcrumbs a {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+    color: var(--text-primary);
+}
+
+.breadcrumbs li + li::before {
+    content: "/";
+    margin-right: var(--space-1);
+    opacity: 0.4;
+}
+
+.breadcrumbs [aria-current] {
+    color: var(--text-primary);
+}
+
+/* ========================================
    SINGLE POST
    ======================================== */
 

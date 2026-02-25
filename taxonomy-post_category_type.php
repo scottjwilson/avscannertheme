@@ -16,6 +16,7 @@ $term = get_queried_object();
 <section class="section">
     <div class="container">
         <div class="section-header">
+            <?php avs_breadcrumbs(); ?>
             <span class="text-label"><?php esc_html_e("News Category", "avscannertheme"); ?></span>
             <h1 class="text-display"><?php echo esc_html($term->name); ?></h1>
             <?php if ($term->description): ?>
