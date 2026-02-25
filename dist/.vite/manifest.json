@@ -1,4 +1,28 @@
 {
+  "fonts/barlow-condensed-500.woff2": {
+    "file": "assets/barlow-condensed-500-k5sK0YPh.woff2",
+    "src": "fonts/barlow-condensed-500.woff2"
+  },
+  "fonts/barlow-condensed-600.woff2": {
+    "file": "assets/barlow-condensed-600-5aTTnVqQ.woff2",
+    "src": "fonts/barlow-condensed-600.woff2"
+  },
+  "fonts/barlow-condensed-700.woff2": {
+    "file": "assets/barlow-condensed-700-DDMez4TK.woff2",
+    "src": "fonts/barlow-condensed-700.woff2"
+  },
+  "fonts/barlow-condensed-800.woff2": {
+    "file": "assets/barlow-condensed-800-CMaaahLA.woff2",
+    "src": "fonts/barlow-condensed-800.woff2"
+  },
+  "fonts/barlow-condensed-900.woff2": {
+    "file": "assets/barlow-condensed-900-BAFRnr5n.woff2",
+    "src": "fonts/barlow-condensed-900.woff2"
+  },
+  "fonts/inter-latin.woff2": {
+    "file": "assets/inter-latin-8kRkwJBP.woff2",
+    "src": "fonts/inter-latin.woff2"
+  },
   "js/main.js": {
     "file": "js/main.js",
     "name": "main",
@@ -6,6 +30,14 @@
     "isEntry": true,
     "css": [
       "css/main.css"
+    ],
+    "assets": [
+      "assets/inter-latin-8kRkwJBP.woff2",
+      "assets/barlow-condensed-500-k5sK0YPh.woff2",
+      "assets/barlow-condensed-600-5aTTnVqQ.woff2",
+      "assets/barlow-condensed-700-DDMez4TK.woff2",
+      "assets/barlow-condensed-800-CMaaahLA.woff2",
+      "assets/barlow-condensed-900-BAFRnr5n.woff2"
     ]
   }
 }

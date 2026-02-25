@@ -76,15 +76,6 @@ add_filter('the_content', 'avs_add_decoding_async', 999);
 add_filter('post_thumbnail_html', 'avs_add_decoding_async', 999);
 
 /**
- * Preconnect to Google Fonts domains for faster font loading.
- */
-function avs_resource_hints(): void {
-    echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
-    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
-}
-add_action('wp_head', 'avs_resource_hints', 1);
-
-/**
  * Enqueue base styles and scripts
  */
 function avs_enqueue_assets(): void
@@ -102,19 +93,11 @@ function avs_enqueue_assets(): void
         }
     }
 
-    // Google Fonts
-    wp_enqueue_style(
-        "cvw-google-fonts",
-        "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Inter:wght@400;500;600&display=swap",
-        [],
-        null,
-    );
-
     // Fallback: enqueue CSS directly if Vite is not available
     wp_enqueue_style(
         "cvw-variables",
         get_template_directory_uri() . "/css/variables.css",
-        ["cvw-google-fonts"],
+        [],
         CVW_VERSION,
     );
     wp_enqueue_style(
