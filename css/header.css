@@ -131,4 +131,23 @@
     display: none;
 }
 
+/* ========================================
+   MOBILE
+   ======================================== */
+
+@media (max-width: 639px) {
+    .header-inner {
+        gap: var(--space-3);
+    }
+
+    .site-logo-img,
+    .site-logo .custom-logo {
+        height: 32px;
+    }
+
+    .site-logo-text {
+        font-size: var(--text-sm);
+    }
+}
+
 /* Mobile menu toggle and nav removed — category bar is primary navigation */

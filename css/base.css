@@ -572,6 +572,24 @@ h6 {
 }
 
 /* ========================================
+   MOBILE TIGHTENING
+   ======================================== */
+
+@media (max-width: 639px) {
+    .card {
+        padding: var(--space-4);
+    }
+
+    .text-display {
+        font-size: clamp(1.75rem, 5vw, 2.5rem);
+    }
+
+    .container {
+        padding-inline: var(--space-4);
+    }
+}
+
+/* ========================================
    REDUCED MOTION
    ======================================== */
 

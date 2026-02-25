@@ -207,7 +207,15 @@
     }
 
     .header-search .search-submit {
-        width: 32px;
-        height: 32px;
+        width: 44px;
+        height: 44px;
+    }
+
+    .search-dropdown {
+        max-height: 60vh;
+    }
+
+    .search-dropdown-item {
+        padding: var(--space-3) var(--space-3);
     }
 }

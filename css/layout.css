@@ -596,3 +596,23 @@
     color: var(--text-muted);
     font-weight: 500;
 }
+
+/* ========================================
+   MOBILE TIGHTENING
+   ======================================== */
+
+@media (max-width: 639px) {
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+        gap: var(--space-4);
+    }
+
+    .section {
+        padding-block: var(--space-6);
+    }
+
+    .single-header {
+        margin-bottom: var(--space-6);
+    }
+}
