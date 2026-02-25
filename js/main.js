@@ -66,16 +66,15 @@ import "../css/front-page.css";
   // ========================================
   // REVEAL ANIMATIONS (INTERSECTION OBSERVER)
   // ========================================
+  function isInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  }
+
   function initRevealAnimations() {
     const revealElements = document.querySelectorAll(".reveal");
 
     if (!revealElements.length) return;
-
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px 0px -10% 0px",
-      threshold: 0.1,
-    };
 
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -83,10 +82,15 @@ import "../css/front-page.css";
           entry.target.classList.add("is-visible");
         }
       });
-    }, observerOptions);
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.1 });
 
     revealElements.forEach((el) => {
-      revealObserver.observe(el);
+      // Show above-the-fold elements immediately (IO fires async)
+      if (isInViewport(el)) {
+        el.classList.add("is-visible");
+      } else {
+        revealObserver.observe(el);
+      }
     });
   }
 
@@ -98,22 +102,20 @@ import "../css/front-page.css";
 
     if (!staggerContainers.length) return;
 
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px 0px -10% 0px",
-      threshold: 0.1,
-    };
-
     const staggerObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("is-visible");
         }
       });
-    }, observerOptions);
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.1 });
 
     staggerContainers.forEach((el) => {
-      staggerObserver.observe(el);
+      if (isInViewport(el)) {
+        el.classList.add("is-visible");
+      } else {
+        staggerObserver.observe(el);
+      }
     });
   }
 
