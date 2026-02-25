@@ -437,7 +437,11 @@ function avs_breadcrumbs(): void {
                 $items[] = '<li><a href="' . esc_url(get_term_link($cat)) . '">' . esc_html($cat->name) . '</a></li>';
             }
         }
-        $items[] = '<li><span aria-current="page">' . esc_html(get_the_title()) . '</span></li>';
+        $title = get_the_title();
+        if (mb_strlen($title) > 50) {
+            $title = mb_substr($title, 0, 50) . '…';
+        }
+        $items[] = '<li><span aria-current="page">' . esc_html($title) . '</span></li>';
     } elseif (is_tax('post_category_type')) {
         $term = get_queried_object();
         $items[] = '<li><span aria-current="page">' . esc_html($term->name) . '</span></li>';
