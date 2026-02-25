@@ -94,11 +94,23 @@
 </div>
 
 <?php
+$priority_order = [
+    'crime', 'missing-person', 'accident', 'community', 'fire',
+    'traffic', 'weather', 'general',
+];
 $nav_categories = get_terms([
     'taxonomy'   => 'post_category_type',
     'hide_empty' => true,
     'exclude'    => avscanner_get_ad_term_id(),
 ]);
+if (!is_wp_error($nav_categories)) {
+    $order_map = array_flip($priority_order);
+    usort($nav_categories, function ($a, $b) use ($order_map) {
+        $pa = $order_map[$a->slug] ?? PHP_INT_MAX;
+        $pb = $order_map[$b->slug] ?? PHP_INT_MAX;
+        return $pa <=> $pb;
+    });
+}
 ?>
 <?php if (!is_wp_error($nav_categories) && !empty($nav_categories)):
     $all_url    = home_url('/');
