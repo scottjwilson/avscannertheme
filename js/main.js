@@ -475,9 +475,25 @@ import "../css/front-page.css";
     const dropdown = document.getElementById("search-dropdown");
     if (!input || !dropdown) return;
 
+    // Overlay elements
+    const overlay = document.querySelector(".search-overlay");
+    const overlayInput = overlay?.querySelector(".search-overlay-input");
+    const overlayResults = overlay?.querySelector(".search-overlay-results");
+    const overlayBack = overlay?.querySelector(".search-overlay-back");
+    const searchTrigger = document.querySelector(".search-trigger");
+
+    // Mobile detection
+    const mobileMQ = window.matchMedia("(max-width: 639px)");
+
     let debounceTimer = null;
     let controller = null;
     let activeIndex = -1;
+
+    // --- Shared search/render logic ---
+
+    function renderResults(target, html) {
+      target.innerHTML = html;
+    }
 
     function showDropdown(html) {
       dropdown.innerHTML = html;
@@ -492,12 +508,12 @@ import "../css/front-page.css";
       activeIndex = -1;
     }
 
-    function getItems() {
-      return dropdown.querySelectorAll(".search-dropdown-item");
+    function getItems(container) {
+      return container.querySelectorAll(".search-dropdown-item");
     }
 
-    function setActive(index) {
-      const items = getItems();
+    function setActive(container, index) {
+      const items = getItems(container);
       items.forEach((el) => el.classList.remove("is-active"));
       activeIndex = index;
       if (items[activeIndex]) {
@@ -506,11 +522,45 @@ import "../css/front-page.css";
       }
     }
 
-    async function doSearch(query) {
+    function buildResultsHTML(posts, query, formAction) {
+      if (!posts.length) {
+        return '<div class="search-dropdown-empty">No results found</div>';
+      }
+
+      const itemsHTML = posts
+        .map((p) => {
+          const thumb = p.thumbnail_url
+            ? `<img class="search-dropdown-thumb" src="${p.thumbnail_url}" alt="" loading="lazy" decoding="async">`
+            : "";
+          const badge =
+            p.categories_detail?.length
+              ? `<span class="badge badge-${p.categories_detail[0].slug}">${escHTML(p.categories_detail[0].name)}</span>`
+              : "";
+          return `<a class="search-dropdown-item" href="${p.permalink}" role="option">
+            ${thumb}
+            <span class="search-dropdown-body">
+              <span class="search-dropdown-title">${escHTML(p.title)}</span>
+              <span class="search-dropdown-meta">${badge}<span>${escHTML(p.date_short)}</span></span>
+            </span>
+          </a>`;
+        })
+        .join("");
+
+      const footerHTML = `<a class="search-dropdown-footer" href="${formAction}?s=${encodeURIComponent(query)}&post_type=fb_post">View all results \u2192</a>`;
+
+      return itemsHTML + footerHTML;
+    }
+
+    async function doSearch(query, target, formAction) {
       if (controller) controller.abort();
       controller = new AbortController();
 
-      showDropdown('<div class="search-dropdown-loading">Searching\u2026</div>');
+      const isOverlay = target === overlayResults;
+      if (isOverlay) {
+        renderResults(target, '<div class="search-dropdown-loading">Searching\u2026</div>');
+      } else {
+        showDropdown('<div class="search-dropdown-loading">Searching\u2026</div>');
+      }
 
       try {
         const resp = await fetch(
@@ -519,42 +569,26 @@ import "../css/front-page.css";
         );
         if (!resp.ok) throw new Error(resp.statusText);
         const posts = await resp.json();
+        const html = buildResultsHTML(posts, query, formAction);
 
-        if (!posts.length) {
-          showDropdown('<div class="search-dropdown-empty">No results found</div>');
-          return;
+        if (isOverlay) {
+          renderResults(target, html);
+        } else {
+          showDropdown(html);
         }
-
-        const itemsHTML = posts
-          .map((p) => {
-            const thumb = p.thumbnail_url
-              ? `<img class="search-dropdown-thumb" src="${p.thumbnail_url}" alt="" loading="lazy" decoding="async">`
-              : "";
-            const badge =
-              p.categories_detail?.length
-                ? `<span class="badge badge-${p.categories_detail[0].slug}">${escHTML(p.categories_detail[0].name)}</span>`
-                : "";
-            return `<a class="search-dropdown-item" href="${p.permalink}" role="option">
-              ${thumb}
-              <span class="search-dropdown-body">
-                <span class="search-dropdown-title">${escHTML(p.title)}</span>
-                <span class="search-dropdown-meta">${badge}<span>${escHTML(p.date_short)}</span></span>
-              </span>
-            </a>`;
-          })
-          .join("");
-
-        const formAction = input.closest("form").action;
-        const footerHTML = `<a class="search-dropdown-footer" href="${formAction}?s=${encodeURIComponent(query)}&post_type=fb_post">View all results \u2192</a>`;
-
-        showDropdown(itemsHTML + footerHTML);
         activeIndex = -1;
       } catch (err) {
         if (err.name === "AbortError") return;
         logError("inline-search", err);
-        hideDropdown();
+        if (isOverlay) {
+          renderResults(target, "");
+        } else {
+          hideDropdown();
+        }
       }
     }
+
+    // --- Desktop inline search (unchanged behavior) ---
 
     input.addEventListener("input", () => {
       clearTimeout(debounceTimer);
@@ -563,44 +597,121 @@ import "../css/front-page.css";
         hideDropdown();
         return;
       }
-      debounceTimer = setTimeout(() => doSearch(query), 300);
+      const formAction = input.closest("form").action;
+      debounceTimer = setTimeout(() => doSearch(query, dropdown, formAction), 300);
     });
 
     input.addEventListener("keydown", (e) => {
       if (dropdown.hidden) return;
-      const items = getItems();
+      const items = getItems(dropdown);
       if (!items.length) return;
 
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setActive(activeIndex < items.length - 1 ? activeIndex + 1 : 0);
+        setActive(dropdown, activeIndex < items.length - 1 ? activeIndex + 1 : 0);
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
-        setActive(activeIndex > 0 ? activeIndex - 1 : items.length - 1);
+        setActive(dropdown, activeIndex > 0 ? activeIndex - 1 : items.length - 1);
       } else if (e.key === "Enter") {
         if (activeIndex >= 0 && items[activeIndex]) {
           e.preventDefault();
           items[activeIndex].click();
         }
-        // else: let form submit normally
       } else if (e.key === "Escape") {
         e.preventDefault();
         hideDropdown();
       }
     });
 
-    // Click outside closes dropdown
     document.addEventListener("click", (e) => {
       if (!e.target.closest(".header-search-wrap")) {
         hideDropdown();
       }
     });
 
-    // Re-show on focus if query exists
     input.addEventListener("focus", () => {
       if (input.value.trim().length >= 2 && dropdown.innerHTML && dropdown.hidden) {
         dropdown.hidden = false;
         input.setAttribute("aria-expanded", "true");
+      }
+    });
+
+    // --- Mobile overlay ---
+
+    if (!overlay || !overlayInput || !overlayResults || !overlayBack || !searchTrigger) return;
+
+    function openOverlay() {
+      overlay.hidden = false;
+      document.body.classList.add("search-open");
+      // Delay focus to after the overlay is visible
+      requestAnimationFrame(() => overlayInput.focus());
+      // If there's already text, re-run search
+      const query = overlayInput.value.trim();
+      if (query.length >= 2) {
+        const formAction = overlayInput.closest("form").action;
+        doSearch(query, overlayResults, formAction);
+      }
+    }
+
+    function closeOverlay() {
+      overlay.hidden = true;
+      document.body.classList.remove("search-open");
+      renderResults(overlayResults, "");
+      activeIndex = -1;
+    }
+
+    searchTrigger.addEventListener("click", openOverlay);
+    overlayBack.addEventListener("click", closeOverlay);
+
+    // Overlay input search
+    overlayInput.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      const query = overlayInput.value.trim();
+      if (query.length < 2) {
+        renderResults(overlayResults, "");
+        return;
+      }
+      const formAction = overlayInput.closest("form").action;
+      debounceTimer = setTimeout(() => doSearch(query, overlayResults, formAction), 300);
+    });
+
+    // Overlay keyboard navigation
+    overlayInput.addEventListener("keydown", (e) => {
+      const items = getItems(overlayResults);
+
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeOverlay();
+        return;
+      }
+
+      if (!items.length) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setActive(overlayResults, activeIndex < items.length - 1 ? activeIndex + 1 : 0);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setActive(overlayResults, activeIndex > 0 ? activeIndex - 1 : items.length - 1);
+      } else if (e.key === "Enter") {
+        if (activeIndex >= 0 && items[activeIndex]) {
+          e.preventDefault();
+          items[activeIndex].click();
+        }
+      }
+    });
+
+    // Close overlay when a result is tapped
+    overlayResults.addEventListener("click", (e) => {
+      if (e.target.closest(".search-dropdown-item")) {
+        closeOverlay();
+      }
+    });
+
+    // Global Escape to close overlay
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !overlay.hidden) {
+        closeOverlay();
       }
     });
   }

@@ -47,7 +47,7 @@
                 </a>
             <?php endif; ?>
 
-            <!-- Header Search (full width) -->
+            <!-- Header Search (full width, hidden on mobile) -->
             <div class="header-search-wrap">
                 <form role="search" method="get" class="header-search" action="<?php echo esc_url(home_url('/')); ?>">
                     <label for="header-search-input" class="sr-only">
@@ -65,6 +65,11 @@
                 <div id="search-dropdown" class="search-dropdown" role="listbox" aria-label="<?php esc_attr_e('Search suggestions', 'avscannertheme'); ?>" hidden></div>
             </div>
 
+            <!-- Mobile Search Trigger (hidden on desktop) -->
+            <button class="search-trigger" aria-label="<?php esc_attr_e('Open search', 'avscannertheme'); ?>">
+                <?php echo avs_icon('search', 20); ?>
+            </button>
+
             <!-- Theme Toggle -->
             <button class="theme-toggle" aria-label="<?php esc_attr_e('Toggle theme', 'avscannertheme'); ?>">
                 <span class="icon-sun"><?php echo avs_icon('sun', 20); ?></span>
@@ -74,6 +79,21 @@
         </div>
     </div>
 </header>
+
+<!-- Fullscreen Search Overlay (mobile) -->
+<div class="search-overlay" hidden>
+    <div class="search-overlay-header">
+        <button class="search-overlay-back" aria-label="<?php esc_attr_e('Close search', 'avscannertheme'); ?>">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <form class="search-overlay-form" role="search" action="<?php echo esc_url(home_url('/')); ?>">
+            <input type="search" class="search-overlay-input" name="s"
+                   placeholder="<?php esc_attr_e('Search posts...', 'avscannertheme'); ?>" autocomplete="off">
+            <input type="hidden" name="post_type" value="fb_post">
+        </form>
+    </div>
+    <div class="search-overlay-results"></div>
+</div>
 
 <?php
 $nav_categories = get_terms([
