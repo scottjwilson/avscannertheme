@@ -24,20 +24,40 @@ $term = get_queried_object();
         </div>
 
         <?php if (have_posts()): ?>
-            <div class="grid grid-3 stagger-children reveal">
-                <?php while (have_posts()):
+            <div class="grid grid-3 stagger-children reveal"
+                 data-infinite-scroll
+                 data-per-page="12"
+                 data-total-pages="<?php echo (int) $wp_query->max_num_pages; ?>"
+                 data-current-page="1"
+                 data-category="<?php echo esc_attr($term->slug); ?>">
+                <?php
+                $post_index = 0;
+                while (have_posts()):
                     the_post();
                     get_template_part('template-parts/card-fb-post', null, [
                         'show_time' => true,
+                        'is_first'  => $post_index === 0,
                     ]);
-                endwhile; ?>
+                    $post_index++;
+                endwhile;
+                ?>
             </div>
 
-            <?php the_posts_pagination([
-                "mid_size" => 2,
-                "prev_text" => "&laquo;",
-                "next_text" => "&raquo;",
-            ]); ?>
+            <div class="infinite-scroll-controls">
+                <div class="infinite-scroll-sentinel" aria-hidden="true"></div>
+                <button class="btn btn-outline infinite-scroll-load-more" hidden>
+                    Load More
+                </button>
+                <p class="infinite-scroll-status" hidden></p>
+            </div>
+
+            <noscript>
+                <?php the_posts_pagination([
+                    "mid_size" => 2,
+                    "prev_text" => "&laquo;",
+                    "next_text" => "&raquo;",
+                ]); ?>
+            </noscript>
 
         <?php else: ?>
             <div class="empty-state">

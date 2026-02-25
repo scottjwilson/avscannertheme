@@ -25,31 +25,48 @@ $posts_query = new WP_Query([
         </div>
 
         <?php if ($posts_query->have_posts()): ?>
-            <div class="grid grid-3 stagger-children reveal">
+            <div class="grid grid-3 stagger-children reveal"
+                 data-infinite-scroll
+                 data-per-page="12"
+                 data-total-pages="<?php echo (int) $posts_query->max_num_pages; ?>"
+                 data-current-page="1">
                 <?php
+                $post_index = 0;
                 while ($posts_query->have_posts()):
                     $posts_query->the_post();
                     get_template_part('template-parts/card-fb-post', null, [
                         'show_time' => true,
+                        'is_first'  => $post_index === 0,
                     ]);
+                    $post_index++;
                 endwhile;
                 ?>
             </div>
 
-            <?php
-            $total_pages = $posts_query->max_num_pages;
-            if ($total_pages > 1):
-                echo '<nav class="pagination">';
-                echo paginate_links([
-                    'total'     => $total_pages,
-                    'current'   => $paged,
-                    'mid_size'  => 2,
-                    'prev_text' => '&laquo;',
-                    'next_text' => '&raquo;',
-                ]);
-                echo '</nav>';
-            endif;
-            ?>
+            <div class="infinite-scroll-controls">
+                <div class="infinite-scroll-sentinel" aria-hidden="true"></div>
+                <button class="btn btn-outline infinite-scroll-load-more" hidden>
+                    Load More
+                </button>
+                <p class="infinite-scroll-status" hidden></p>
+            </div>
+
+            <noscript>
+                <?php
+                $total_pages = $posts_query->max_num_pages;
+                if ($total_pages > 1):
+                    echo '<nav class="pagination">';
+                    echo paginate_links([
+                        'total'     => $total_pages,
+                        'current'   => $paged,
+                        'mid_size'  => 2,
+                        'prev_text' => '&laquo;',
+                        'next_text' => '&raquo;',
+                    ]);
+                    echo '</nav>';
+                endif;
+                ?>
+            </noscript>
 
             <?php wp_reset_postdata(); ?>
 

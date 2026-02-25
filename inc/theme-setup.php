@@ -38,6 +38,9 @@ function avs_setup(): void
     ]);
 
     add_image_size("cvw-card", 600, 400, true);
+    add_image_size('cvw-card-2x', 900, 600, true);
+    add_image_size('cvw-hero', 800, 0, false);
+    add_image_size('cvw-hero-2x', 1200, 0, false);
 
     register_nav_menus([
         "primary" => __("Primary Menu", "avscannertheme"),
@@ -45,6 +48,32 @@ function avs_setup(): void
     ]);
 }
 add_action("after_setup_theme", "avs_setup");
+
+/**
+ * Generate WebP sub-sizes for JPEG/PNG uploads (WP 5.8+).
+ * The original full-size upload stays as-is; only thumbnails convert.
+ * Falls back silently if the server lacks WebP support in GD/Imagick.
+ */
+function avs_webp_output_format(array $formats): array {
+    $formats['image/jpeg'] = 'image/webp';
+    $formats['image/png']  = 'image/webp';
+    return $formats;
+}
+add_filter('image_editor_output_format', 'avs_webp_output_format');
+
+/**
+ * Add decoding="async" to any <img> tag that doesn't already have it.
+ */
+function avs_add_decoding_async(string $content): string {
+    if (empty($content)) return $content;
+    return preg_replace(
+        '/<img(?![^>]*\bdecoding\b)([^>]*)>/i',
+        '<img decoding="async"$1>',
+        $content
+    );
+}
+add_filter('the_content', 'avs_add_decoding_async', 999);
+add_filter('post_thumbnail_html', 'avs_add_decoding_async', 999);
 
 /**
  * Enqueue base styles and scripts

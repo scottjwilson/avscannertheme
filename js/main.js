@@ -287,6 +287,176 @@ import "../css/front-page.css";
   }
 
   // ========================================
+  // INFINITE SCROLL
+  // ========================================
+  function escHTML(str) {
+    const div = document.createElement("div");
+    div.textContent = str || "";
+    return div.innerHTML;
+  }
+
+  function createSkeletons(count) {
+    const template = document.getElementById("card-skeleton");
+    if (!template) return [];
+    return Array.from({ length: count }, () => {
+      const el = template.content.cloneNode(true).firstElementChild;
+      el.classList.add("infinite-scroll-skeleton");
+      return el;
+    });
+  }
+
+  function buildCard(post) {
+    const article = document.createElement("article");
+    const isAd = post.categories_detail?.some((c) => c.slug === "advertisement");
+    article.className = "card card-hover" + (isAd ? " card-sponsored" : "");
+
+    let imageHTML = "";
+    if (post.thumbnail_url || post.thumbnail_html) {
+      const videoClass = post.video_url ? " has-video" : "";
+      const playIcon = post.video_url
+        ? '<span class="card-play-icon" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="rgba(0,0,0,0.6)"/><path d="M19 15l14 9-14 9V15z" fill="white"/></svg></span>'
+        : "";
+      const imgTag = post.thumbnail_html
+        ? post.thumbnail_html
+        : `<img src="${post.thumbnail_url}" alt="${escHTML(post.title)}" loading="lazy" decoding="async">`;
+      imageHTML = `<a href="${post.permalink}" class="card-image-link${videoClass}"><div class="card-image">${imgTag}${playIcon}</div></a>`;
+    }
+
+    let badgesHTML = "";
+    if (post.categories_detail?.length) {
+      if (isAd) {
+        badgesHTML =
+          '<div class="card-badges"><span class="badge badge-sponsored">Sponsored</span></div>';
+      } else {
+        badgesHTML =
+          '<div class="card-badges">' +
+          post.categories_detail
+            .map(
+              (c) =>
+                `<a href="${c.link}" class="badge badge-${c.slug}">${escHTML(c.name)}</a>`,
+            )
+            .join("") +
+          "</div>";
+      }
+    }
+
+    let sourceHTML = "";
+    if (post.shared_url) {
+      try {
+        const host = new URL(post.shared_url).hostname;
+        sourceHTML = `<span class="card-source">via ${escHTML(host)}</span>`;
+      } catch (e) {}
+    }
+
+    article.innerHTML = `
+        ${imageHTML}
+        <span class="card-date">${escHTML(post.date_short)} at ${escHTML(post.time)}</span>
+        ${badgesHTML}
+        ${sourceHTML}
+        <h3 class="card-title"><a href="${post.permalink}">${escHTML(post.title)}</a></h3>
+        <p class="card-text">${escHTML(post.excerpt_short)}</p>
+        <a href="${post.permalink}" class="card-link">Read more <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4.167 10h11.666M10 4.167L15.833 10 10 15.833" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    `;
+    return article;
+  }
+
+  function initInfiniteScroll() {
+    const grids = document.querySelectorAll("[data-infinite-scroll]");
+    if (!grids.length) return;
+
+    grids.forEach((grid) => {
+      const perPage = parseInt(grid.dataset.perPage) || 12;
+      const totalPages = parseInt(grid.dataset.totalPages) || 1;
+      const category = grid.dataset.category || "";
+      let currentPage = parseInt(grid.dataset.currentPage) || 1;
+      let loading = false;
+
+      const controls = grid.nextElementSibling; // .infinite-scroll-controls
+      if (!controls) return;
+      const sentinel = controls.querySelector(".infinite-scroll-sentinel");
+      const loadMoreBtn = controls.querySelector(".infinite-scroll-load-more");
+      const status = controls.querySelector(".infinite-scroll-status");
+
+      if (currentPage >= totalPages) return; // No more pages
+
+      // IntersectionObserver on sentinel
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && !loading) {
+            loadNextPage();
+          }
+        },
+        { rootMargin: "200px" },
+      );
+      observer.observe(sentinel);
+
+      // Manual fallback button
+      loadMoreBtn.hidden = false;
+      loadMoreBtn.addEventListener("click", loadNextPage);
+
+      async function loadNextPage() {
+        if (loading || currentPage >= totalPages) return;
+        loading = true;
+        loadMoreBtn.hidden = true;
+        status.hidden = false;
+        status.textContent = "";
+
+        // Show skeleton placeholders
+        const skeletons = createSkeletons(3);
+        grid.append(...skeletons);
+
+        try {
+          const params = new URLSearchParams({
+            page: currentPage + 1,
+            per_page: perPage,
+          });
+          if (category) params.set("category", category);
+
+          const resp = await fetch(
+            `/wp-json/avscanner/v1/posts?${params}`,
+          );
+          if (!resp.ok) throw new Error(resp.statusText);
+
+          const posts = await resp.json();
+          const newTotal =
+            parseInt(resp.headers.get("X-WP-TotalPages")) || totalPages;
+
+          // Remove skeletons
+          skeletons.forEach((s) => s.remove());
+
+          // Render cards
+          posts.forEach((post) => {
+            const card = buildCard(post);
+            grid.appendChild(card);
+          });
+
+          currentPage++;
+          grid.dataset.currentPage = currentPage;
+
+          if (currentPage >= newTotal) {
+            observer.disconnect();
+            loadMoreBtn.hidden = true;
+            status.hidden = false;
+            status.textContent = "All posts loaded";
+          } else {
+            loadMoreBtn.hidden = false;
+            status.hidden = true;
+          }
+
+          // Trigger image fade-in for new cards
+          initImageFadeIn();
+        } catch (err) {
+          skeletons.forEach((s) => s.remove());
+          loadMoreBtn.hidden = false;
+          status.hidden = false;
+          status.textContent = "Failed to load — try again";
+        }
+        loading = false;
+      }
+    });
+  }
+
+  // ========================================
   // INITIALIZE
   // ========================================
   function init() {
@@ -306,6 +476,7 @@ import "../css/front-page.css";
     handleHeaderScroll();
     initThemeToggle();
     initSkeletonLoaders();
+    initInfiniteScroll();
     initRevealAnimations();
     initStaggerAnimations();
     initSmoothScroll();

@@ -9,6 +9,7 @@
  */
 
 $show_time = !empty($args["show_time"]);
+$is_first  = !empty($args['is_first']);
 $thumb_id = get_post_thumbnail_id();
 $fb_image = $thumb_id
     ? wp_get_attachment_url($thumb_id)
@@ -27,11 +28,19 @@ $card_class = "card card-hover" . ($is_ad ? " card-sponsored" : "");
     <?php if ($thumb_id) : ?>
         <a href="<?php the_permalink(); ?>" class="card-image-link<?php echo $fb_video ? ' has-video' : ''; ?>">
             <div class="card-image">
-                <?php echo wp_get_attachment_image($thumb_id, 'cvw-card', false, [
-                    'sizes'   => $sizes,
-                    'loading' => 'lazy',
-                    'alt'     => get_the_title(),
-                ]); ?>
+                <?php
+                $img_attrs = [
+                    'sizes' => $sizes,
+                    'alt'   => get_the_title(),
+                ];
+                if ($is_first) {
+                    $img_attrs['fetchpriority'] = 'high';
+                    $img_attrs['loading']       = false;
+                } else {
+                    $img_attrs['loading'] = 'lazy';
+                }
+                echo wp_get_attachment_image($thumb_id, 'cvw-card', false, $img_attrs);
+                ?>
                 <?php if ($fb_video): ?>
                     <span class="card-play-icon" aria-hidden="true">
                         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
@@ -47,7 +56,8 @@ $card_class = "card card-hover" . ($is_ad ? " card-sponsored" : "");
             <div class="card-image">
                 <img src="<?php echo esc_url($fb_image); ?>"
                      alt="<?php the_title_attribute(); ?>"
-                     loading="lazy">
+                     <?php echo $is_first ? 'fetchpriority="high"' : 'loading="lazy"'; ?>
+                     decoding="async">
                 <?php if ($fb_video): ?>
                     <span class="card-play-icon" aria-hidden="true">
                         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">

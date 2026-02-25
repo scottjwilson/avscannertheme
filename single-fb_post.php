@@ -47,13 +47,14 @@ get_header(); ?>
 
         <?php if ($fb_video): ?>
             <div class="single-video" data-fb-permalink="<?php echo esc_url($fb_link); ?>">
-                <video controls preload="metadata" poster="<?php echo esc_url($thumb_id ? wp_get_attachment_url($thumb_id) : $fb_image); ?>">
+                <video controls preload="metadata" poster="<?php echo esc_url($thumb_id ? wp_get_attachment_image_url($thumb_id, 'cvw-hero') : $fb_image); ?>">
                     <source src="<?php echo esc_url($fb_video); ?>" type="video/mp4">
                 </video>
                 <div class="single-video-fallback" hidden>
                     <?php if ($fb_image): ?>
                         <img src="<?php echo esc_url($fb_image); ?>"
-                             alt="<?php the_title_attribute(); ?>">
+                             alt="<?php the_title_attribute(); ?>"
+                             decoding="async">
                     <?php endif; ?>
                     <a href="<?php echo esc_url($fb_link); ?>"
                        class="btn btn-primary single-video-fallback-btn"
@@ -72,14 +73,17 @@ get_header(); ?>
         <?php elseif ($fb_image): ?>
             <div class="single-image">
                 <?php if ($thumb_id) :
-                    echo wp_get_attachment_image($thumb_id, 'large', false, [
-                        'sizes' => '(min-width: 800px) 800px, 100vw',
-                        'alt'   => get_the_title(),
+                    echo wp_get_attachment_image($thumb_id, 'cvw-hero', false, [
+                        'sizes'         => '(min-width: 800px) 800px, 100vw',
+                        'alt'           => get_the_title(),
+                        'fetchpriority' => 'high',
+                        'loading'       => false,
                     ]);
                 else : ?>
                     <img src="<?php echo esc_url($fb_image); ?>"
                          alt="<?php the_title_attribute(); ?>"
-                         loading="lazy">
+                         fetchpriority="high"
+                         decoding="async">
                 <?php endif; ?>
             </div>
         <?php endif; ?>
