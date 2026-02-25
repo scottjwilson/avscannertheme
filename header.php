@@ -45,18 +45,22 @@
             <?php endif; ?>
 
             <!-- Header Search (full width) -->
-            <form role="search" method="get" class="header-search" action="<?php echo esc_url(home_url('/')); ?>">
-                <label for="header-search-input" class="sr-only">
-                    <?php esc_html_e('Search posts', 'avscannertheme'); ?>
-                </label>
-                <input type="search" id="header-search-input" class="search-input" name="s"
-                       placeholder="<?php esc_attr_e('Search posts...', 'avscannertheme'); ?>"
-                       value="<?php echo get_search_query(); ?>" autocomplete="off">
-                <input type="hidden" name="post_type" value="fb_post">
-                <button type="submit" class="search-submit" aria-label="<?php esc_attr_e('Search', 'avscannertheme'); ?>">
-                    <?php echo avs_icon('search', 18); ?>
-                </button>
-            </form>
+            <div class="header-search-wrap">
+                <form role="search" method="get" class="header-search" action="<?php echo esc_url(home_url('/')); ?>">
+                    <label for="header-search-input" class="sr-only">
+                        <?php esc_html_e('Search posts', 'avscannertheme'); ?>
+                    </label>
+                    <input type="search" id="header-search-input" class="search-input" name="s"
+                           placeholder="<?php esc_attr_e('Search posts...', 'avscannertheme'); ?>"
+                           value="<?php echo get_search_query(); ?>" autocomplete="off"
+                           role="combobox" aria-expanded="false" aria-controls="search-dropdown" aria-autocomplete="list">
+                    <input type="hidden" name="post_type" value="fb_post">
+                    <button type="submit" class="search-submit" aria-label="<?php esc_attr_e('Search', 'avscannertheme'); ?>">
+                        <?php echo avs_icon('search', 18); ?>
+                    </button>
+                </form>
+                <div id="search-dropdown" class="search-dropdown" role="listbox" aria-label="<?php esc_attr_e('Search suggestions', 'avscannertheme'); ?>" hidden></div>
+            </div>
 
             <!-- Theme Toggle -->
             <button class="theme-toggle" aria-label="<?php esc_attr_e('Toggle theme', 'avscannertheme'); ?>">

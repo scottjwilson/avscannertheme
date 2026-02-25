@@ -459,6 +459,175 @@ import "../css/front-page.css";
   }
 
   // ========================================
+  // INLINE / AJAX SEARCH
+  // ========================================
+  function initInlineSearch() {
+    const input = document.getElementById("header-search-input");
+    const dropdown = document.getElementById("search-dropdown");
+    if (!input || !dropdown) return;
+
+    let debounceTimer = null;
+    let controller = null;
+    let activeIndex = -1;
+
+    function showDropdown(html) {
+      dropdown.innerHTML = html;
+      dropdown.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+    }
+
+    function hideDropdown() {
+      dropdown.hidden = true;
+      dropdown.innerHTML = "";
+      input.setAttribute("aria-expanded", "false");
+      activeIndex = -1;
+    }
+
+    function getItems() {
+      return dropdown.querySelectorAll(".search-dropdown-item");
+    }
+
+    function setActive(index) {
+      const items = getItems();
+      items.forEach((el) => el.classList.remove("is-active"));
+      activeIndex = index;
+      if (items[activeIndex]) {
+        items[activeIndex].classList.add("is-active");
+        items[activeIndex].scrollIntoView({ block: "nearest" });
+      }
+    }
+
+    async function doSearch(query) {
+      if (controller) controller.abort();
+      controller = new AbortController();
+
+      showDropdown('<div class="search-dropdown-loading">Searching\u2026</div>');
+
+      try {
+        const resp = await fetch(
+          `/wp-json/avscanner/v1/posts?search=${encodeURIComponent(query)}&per_page=5`,
+          { signal: controller.signal }
+        );
+        if (!resp.ok) throw new Error(resp.statusText);
+        const posts = await resp.json();
+
+        if (!posts.length) {
+          showDropdown('<div class="search-dropdown-empty">No results found</div>');
+          return;
+        }
+
+        const itemsHTML = posts
+          .map((p) => {
+            const thumb = p.thumbnail_url
+              ? `<img class="search-dropdown-thumb" src="${p.thumbnail_url}" alt="" loading="lazy" decoding="async">`
+              : "";
+            const badge =
+              p.categories_detail?.length
+                ? `<span class="badge badge-${p.categories_detail[0].slug}">${escHTML(p.categories_detail[0].name)}</span>`
+                : "";
+            return `<a class="search-dropdown-item" href="${p.permalink}" role="option">
+              ${thumb}
+              <span class="search-dropdown-body">
+                <span class="search-dropdown-title">${escHTML(p.title)}</span>
+                <span class="search-dropdown-meta">${badge}<span>${escHTML(p.date_short)}</span></span>
+              </span>
+            </a>`;
+          })
+          .join("");
+
+        const formAction = input.closest("form").action;
+        const footerHTML = `<a class="search-dropdown-footer" href="${formAction}?s=${encodeURIComponent(query)}&post_type=fb_post">View all results \u2192</a>`;
+
+        showDropdown(itemsHTML + footerHTML);
+        activeIndex = -1;
+      } catch (err) {
+        if (err.name === "AbortError") return;
+        hideDropdown();
+      }
+    }
+
+    input.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      const query = input.value.trim();
+      if (query.length < 2) {
+        hideDropdown();
+        return;
+      }
+      debounceTimer = setTimeout(() => doSearch(query), 300);
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (dropdown.hidden) return;
+      const items = getItems();
+      if (!items.length) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setActive(activeIndex < items.length - 1 ? activeIndex + 1 : 0);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setActive(activeIndex > 0 ? activeIndex - 1 : items.length - 1);
+      } else if (e.key === "Enter") {
+        if (activeIndex >= 0 && items[activeIndex]) {
+          e.preventDefault();
+          items[activeIndex].click();
+        }
+        // else: let form submit normally
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        hideDropdown();
+      }
+    });
+
+    // Click outside closes dropdown
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".header-search-wrap")) {
+        hideDropdown();
+      }
+    });
+
+    // Re-show on focus if query exists
+    input.addEventListener("focus", () => {
+      if (input.value.trim().length >= 2 && dropdown.innerHTML && dropdown.hidden) {
+        dropdown.hidden = false;
+        input.setAttribute("aria-expanded", "true");
+      }
+    });
+  }
+
+  // ========================================
+  // SCROLL POSITION RESTORE
+  // ========================================
+  function initScrollRestore() {
+    const STORAGE_KEY = "avs_scroll_pos";
+    const grid = document.querySelector("[data-infinite-scroll]");
+
+    if (grid) {
+      // Save scroll position when clicking a card link
+      grid.addEventListener("click", (e) => {
+        const link = e.target.closest("a");
+        if (!link) return;
+        sessionStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({ scrollY: window.scrollY })
+        );
+      });
+
+      // Restore scroll position on page load
+      const saved = sessionStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        try {
+          const { scrollY } = JSON.parse(saved);
+          if (scrollY) {
+            requestAnimationFrame(() => window.scrollTo(0, scrollY));
+          }
+        } catch (e) {}
+      }
+    }
+  }
+
+  // ========================================
   // INITIALIZE
   // ========================================
   function init() {
@@ -483,6 +652,8 @@ import "../css/front-page.css";
       initStaggerAnimations();
       initSmoothScroll();
     }
+    initInlineSearch();
+    initScrollRestore();
     initInfiniteScroll();
     initImageFadeIn();
     setCurrentYear();

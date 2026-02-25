@@ -121,6 +121,10 @@ get_header(); ?>
 
     <?php
     $related_terms = get_the_terms(get_the_ID(), 'post_category_type');
+    $related_query = null;
+    $section_title = 'Related Posts';
+
+    // Try category-based related posts using ALL categories
     if ($related_terms && ! is_wp_error($related_terms)) :
         $related_query = new WP_Query([
             'post_type'      => 'fb_post',
@@ -129,24 +133,36 @@ get_header(); ?>
             'tax_query'      => [[
                 'taxonomy' => 'post_category_type',
                 'field'    => 'term_id',
-                'terms'    => $related_terms[0]->term_id,
+                'terms'    => wp_list_pluck($related_terms, 'term_id'),
             ]],
             'no_found_rows'  => true,
         ]);
-        if ($related_query->have_posts()) : ?>
-            <section class="related-posts">
-                <div class="container">
-                    <h2 class="related-posts-title">Related Posts</h2>
-                    <div class="grid grid-3">
-                        <?php while ($related_query->have_posts()) : $related_query->the_post();
-                            get_template_part('template-parts/card-fb-post');
-                        endwhile; ?>
-                    </div>
-                </div>
-            </section>
-        <?php endif;
-        wp_reset_postdata();
     endif;
+
+    // Fallback to recent posts if no category results
+    if (!$related_query || !$related_query->have_posts()) :
+        $related_query = new WP_Query([
+            'post_type'      => 'fb_post',
+            'posts_per_page' => 3,
+            'post__not_in'   => [get_the_ID()],
+            'no_found_rows'  => true,
+        ]);
+        $section_title = 'Recent Posts';
+    endif;
+
+    if ($related_query->have_posts()) : ?>
+        <section class="related-posts">
+            <div class="container">
+                <h2 class="related-posts-title"><?php echo esc_html($section_title); ?></h2>
+                <div class="grid grid-3">
+                    <?php while ($related_query->have_posts()) : $related_query->the_post();
+                        get_template_part('template-parts/card-fb-post');
+                    endwhile; ?>
+                </div>
+            </div>
+        </section>
+    <?php endif;
+    wp_reset_postdata();
     ?>
 </article>
 
