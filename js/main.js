@@ -230,73 +230,6 @@ import "../css/front-page.css";
   }
 
   // ========================================
-  // SKELETON LOADERS
-  // ========================================
-  function initSkeletonLoaders() {
-    const grids = document.querySelectorAll('.grid.stagger-children');
-    const template = document.getElementById('card-skeleton');
-    if (!grids.length || !template) return;
-
-    grids.forEach((grid) => {
-      const cards = grid.querySelectorAll('.card');
-      if (!cards.length) return;
-
-      // Clone skeletons to match card count (cap at visible count)
-      const count = Math.min(cards.length, 6);
-      const skeletonWrap = document.createElement('div');
-      skeletonWrap.className = 'skeleton-grid';
-      skeletonWrap.classList.add('grid', 'grid-3');
-
-      for (let i = 0; i < count; i++) {
-        skeletonWrap.appendChild(template.content.cloneNode(true));
-      }
-
-      grid.parentNode.insertBefore(skeletonWrap, grid);
-      grid.style.display = 'none';
-
-      // Wait for all images in this grid to load
-      const images = grid.querySelectorAll('.card-image img');
-      if (!images.length) {
-        removeSkeleton(skeletonWrap, grid);
-        return;
-      }
-
-      let loaded = 0;
-      const total = images.length;
-
-      function onImageReady() {
-        loaded++;
-        if (loaded >= total) {
-          removeSkeleton(skeletonWrap, grid);
-        }
-      }
-
-      images.forEach((img) => {
-        if (img.complete && img.naturalHeight > 0) {
-          onImageReady();
-        } else {
-          img.addEventListener('load', onImageReady, { once: true });
-          img.addEventListener('error', onImageReady, { once: true });
-        }
-      });
-
-      // Safety timeout — don't block forever on slow images
-      setTimeout(() => removeSkeleton(skeletonWrap, grid), 5000);
-    });
-  }
-
-  function removeSkeleton(skeletonWrap, grid) {
-    if (!skeletonWrap.parentNode) return; // Already removed
-    skeletonWrap.classList.add('skeleton-fade-out');
-    grid.style.display = '';
-    skeletonWrap.addEventListener('transitionend', () => {
-      skeletonWrap.remove();
-    }, { once: true });
-    // Fallback removal if transition doesn't fire
-    setTimeout(() => skeletonWrap.remove(), 400);
-  }
-
-  // ========================================
   // INFINITE SCROLL
   // ========================================
   function escHTML(str) {
@@ -768,7 +701,6 @@ import "../css/front-page.css";
     handleHeaderScroll();
     initThemeToggle();
     if (!prefersReducedMotion) {
-      initSkeletonLoaders();
       initRevealAnimations();
       initStaggerAnimations();
       initSmoothScroll();
