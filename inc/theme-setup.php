@@ -279,9 +279,8 @@ function avs_icon($name, $size = 20): string
  */
 function avs_prime_post_meta_cache($posts, $query) {
     if (!is_array($posts) || empty($posts) || is_admin()) return $posts;
-    if (!function_exists('update_post_meta_cache')) return $posts;
     $ids = wp_list_pluck($posts, 'ID');
-    update_post_meta_cache($ids);
+    update_postmeta_cache($ids);
     return $posts;
 }
 add_filter('the_posts', 'avs_prime_post_meta_cache', 10, 2);
