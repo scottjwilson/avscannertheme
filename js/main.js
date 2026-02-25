@@ -15,6 +15,8 @@ import "../css/front-page.css";
 (function () {
   "use strict";
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // ========================================
   // HEADER SCROLL BEHAVIOR
   // ========================================
@@ -399,7 +401,7 @@ import "../css/front-page.css";
         loading = true;
         loadMoreBtn.hidden = true;
         status.hidden = false;
-        status.textContent = "";
+        status.textContent = "Loading more posts\u2026";
 
         // Show skeleton placeholders
         const skeletons = createSkeletons(3);
@@ -475,11 +477,13 @@ import "../css/front-page.css";
 
     handleHeaderScroll();
     initThemeToggle();
-    initSkeletonLoaders();
+    if (!prefersReducedMotion) {
+      initSkeletonLoaders();
+      initRevealAnimations();
+      initStaggerAnimations();
+      initSmoothScroll();
+    }
     initInfiniteScroll();
-    initRevealAnimations();
-    initStaggerAnimations();
-    initSmoothScroll();
     initImageFadeIn();
     setCurrentYear();
     initBackToTop();

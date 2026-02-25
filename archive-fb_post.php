@@ -38,7 +38,7 @@ get_header(); ?>
                 <button class="btn btn-outline infinite-scroll-load-more" hidden>
                     Load More
                 </button>
-                <p class="infinite-scroll-status" hidden></p>
+                <p class="infinite-scroll-status" aria-live="polite" hidden></p>
             </div>
 
             <noscript>

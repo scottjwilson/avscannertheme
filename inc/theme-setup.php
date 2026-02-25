@@ -76,6 +76,15 @@ add_filter('the_content', 'avs_add_decoding_async', 999);
 add_filter('post_thumbnail_html', 'avs_add_decoding_async', 999);
 
 /**
+ * Preconnect to Google Fonts domains for faster font loading.
+ */
+function avs_resource_hints(): void {
+    echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
+    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
+}
+add_action('wp_head', 'avs_resource_hints', 1);
+
+/**
  * Enqueue base styles and scripts
  */
 function avs_enqueue_assets(): void

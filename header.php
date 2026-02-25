@@ -13,6 +13,10 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<a href="#main-content" class="skip-link sr-only">
+    <?php esc_html_e('Skip to content', 'avscannertheme'); ?>
+</a>
+
 <div class="top-accent-bar"></div>
 
 <header class="site-header">
@@ -42,7 +46,10 @@
 
             <!-- Header Search (full width) -->
             <form role="search" method="get" class="header-search" action="<?php echo esc_url(home_url('/')); ?>">
-                <input type="search" class="search-input" name="s"
+                <label for="header-search-input" class="sr-only">
+                    <?php esc_html_e('Search posts', 'avscannertheme'); ?>
+                </label>
+                <input type="search" id="header-search-input" class="search-input" name="s"
                        placeholder="<?php esc_attr_e('Search posts...', 'avscannertheme'); ?>"
                        value="<?php echo get_search_query(); ?>" autocomplete="off">
                 <input type="hidden" name="post_type" value="fb_post">
@@ -57,55 +64,17 @@
                 <span class="icon-moon"><?php echo avs_icon('moon', 20); ?></span>
             </button>
 
-            <!-- Mobile Menu Toggle -->
-            <button class="menu-toggle" aria-expanded="false" aria-label="<?php esc_attr_e(
-                "Toggle menu",
-                "avscannertheme",
-            ); ?>">
-                <span class="icon-menu"><?php echo avs_icon(
-                    "menu",
-                    24,
-                ); ?></span>
-                <span class="icon-close"><?php echo avs_icon(
-                    "close",
-                    24,
-                ); ?></span>
-            </button>
         </div>
     </div>
-
-    <!-- Mobile Navigation -->
-    <?php
-    $nav_categories = get_terms([
-        'taxonomy'   => 'post_category_type',
-        'hide_empty' => true,
-        'exclude'    => avscanner_get_ad_term_id(),
-    ]);
-    ?>
-    <nav class="nav-mobile" aria-hidden="true">
-        <?php wp_nav_menu([
-            "theme_location" => "primary",
-            "container" => false,
-            "menu_class" => "nav-mobile-menu",
-            "fallback_cb" => false,
-            "depth" => 1,
-            "link_class" => "nav-link",
-        ]); ?>
-
-        <?php if (!is_wp_error($nav_categories) && !empty($nav_categories)): ?>
-            <div class="nav-mobile-categories">
-                <span class="nav-mobile-label"><?php esc_html_e('Categories', 'avscannertheme'); ?></span>
-                <?php foreach ($nav_categories as $cat): ?>
-                    <a href="<?php echo esc_url(get_term_link($cat)); ?>"
-                       class="badge badge-<?php echo esc_attr($cat->slug); ?>">
-                        <?php echo esc_html($cat->name); ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </nav>
 </header>
 
+<?php
+$nav_categories = get_terms([
+    'taxonomy'   => 'post_category_type',
+    'hide_empty' => true,
+    'exclude'    => avscanner_get_ad_term_id(),
+]);
+?>
 <?php if (!is_wp_error($nav_categories) && !empty($nav_categories)):
     $all_url    = home_url('/');
     $all_active = is_front_page() || (is_post_type_archive('fb_post') && !is_tax());
@@ -131,4 +100,4 @@
 </nav>
 <?php endif; ?>
 
-<main class="main-content">
+<main id="main-content" class="main-content">

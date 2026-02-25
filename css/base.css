@@ -472,6 +472,29 @@ h6 {
     border-width: 0;
 }
 
+.skip-link:focus {
+    position: fixed;
+    top: var(--space-2);
+    left: var(--space-2);
+    z-index: 100000;
+    width: auto;
+    height: auto;
+    padding: var(--space-3) var(--space-6);
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    background: var(--color-primary-600);
+    color: var(--text-on-primary);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+}
+
 .text-center {
     text-align: center;
 }
@@ -546,4 +569,29 @@ h6 {
 ::selection {
     background: var(--selection-bg);
     color: var(--selection-text);
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+
+    .stagger-children > * {
+        opacity: 1;
+        transform: none;
+    }
 }
