@@ -277,7 +277,7 @@ function avs_icon($name, $size = 20): string
  * Prevents N individual get_post_meta() calls on card grids
  * (e.g. _fb_full_picture, _fb_video_url, _fb_permalink, _fb_shared_url).
  */
-function avs_prime_post_meta_cache(array $posts, WP_Query $query): array {
+function avs_prime_post_meta_cache(array $posts, $query): array {
     if (empty($posts) || is_admin()) return $posts;
     $ids = wp_list_pluck($posts, 'ID');
     update_post_meta_cache($ids);
