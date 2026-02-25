@@ -193,9 +193,9 @@ h6 {
     max-width: var(--container-wide);
 }
 
-/* Offset for fixed accent bar (4px) + header (~66px) + category nav (~38px) */
+/* Offset for fixed header (~66px) + category nav (~38px) */
 .main-content {
-    padding-top: 108px;
+    padding-top: 104px;
 }
 
 .section {

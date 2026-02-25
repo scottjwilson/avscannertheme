@@ -4,27 +4,12 @@
  */
 
 /* ========================================
-   TOP ACCENT BAR
-   ======================================== */
-
-.top-accent-bar {
-    background: var(--color-primary-600);
-    height: 4px;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: calc(var(--z-fixed) + 1);
-}
-
-/* ========================================
    HEADER
    ======================================== */
 
 .site-header {
     position: fixed;
-    top: 4px;
+    top: 0;
     left: 0;
     right: 0;
     z-index: var(--z-fixed);

@@ -9,7 +9,7 @@
 
 .category-nav {
     position: fixed;
-    top: calc(4px + 66px); /* accent bar + header height */
+    top: 66px; /* header height */
     left: 0;
     right: 0;
     z-index: calc(var(--z-fixed) - 1);
@@ -22,7 +22,7 @@
     background: var(--header-bg-scrolled);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    top: calc(4px + 57px); /* smaller header when scrolled */
+    top: 57px; /* smaller header when scrolled */
 }
 
 /* ========================================

@@ -20,8 +20,6 @@
     <?php esc_html_e('Skip to content', 'avscannertheme'); ?>
 </a>
 
-<div class="top-accent-bar"></div>
-
 <header class="site-header">
     <div class="container">
         <div class="header-inner">
