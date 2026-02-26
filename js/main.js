@@ -587,8 +587,8 @@ import "../css/front-page.css";
     function openOverlay() {
       overlay.hidden = false;
       document.body.classList.add("search-open");
-      // Delay focus to after the overlay is visible
-      requestAnimationFrame(() => overlayInput.focus());
+      // Focus synchronously within the click event so mobile browsers show the keyboard
+      overlayInput.focus();
       // If there's already text, re-run search
       const query = overlayInput.value.trim();
       if (query.length >= 2) {
