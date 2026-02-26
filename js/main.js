@@ -584,9 +584,13 @@ import "../css/front-page.css";
 
     if (!overlay || !overlayInput || !overlayResults || !overlayBack || !searchTrigger) return;
 
+    let savedScrollY = 0;
+
     function openOverlay() {
+      savedScrollY = window.scrollY;
       overlay.hidden = false;
       document.body.classList.add("search-open");
+      document.body.style.top = `-${savedScrollY}px`;
       // Focus synchronously within the click event so mobile browsers show the keyboard
       overlayInput.focus();
       // If there's already text, re-run search
@@ -600,6 +604,8 @@ import "../css/front-page.css";
     function closeOverlay() {
       overlay.hidden = true;
       document.body.classList.remove("search-open");
+      document.body.style.top = "";
+      window.scrollTo(0, savedScrollY);
       renderResults(overlayResults, "");
       activeIndex = -1;
     }

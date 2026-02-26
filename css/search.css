@@ -207,9 +207,11 @@
     display: none;
 }
 
-/* Lock body scroll when overlay is open */
+/* Lock body scroll when overlay is open (position: fixed needed for iOS Safari) */
 body.search-open {
     overflow: hidden;
+    position: fixed;
+    inset: 0;
 }
 
 /* ========================================
