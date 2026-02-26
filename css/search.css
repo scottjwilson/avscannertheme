@@ -105,9 +105,13 @@
     transition: background var(--transition-fast);
 }
 
-.search-dropdown-item:hover,
-.search-dropdown-item.is-active {
+.search-dropdown-item:hover {
     background: var(--bg-interactive-hover);
+}
+
+.search-dropdown-item.is-active {
+    background: color-mix(in srgb, var(--color-primary-600) 12%, var(--bg-surface-raised));
+    box-shadow: inset 3px 0 0 var(--color-primary-600);
 }
 
 .search-dropdown-item + .search-dropdown-item {
