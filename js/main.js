@@ -607,6 +607,9 @@ import "../css/front-page.css";
     searchTrigger.addEventListener("click", openOverlay);
     overlayBack.addEventListener("click", closeOverlay);
 
+    // Dismiss keyboard when scrolling results
+    overlayResults.addEventListener("scroll", () => overlayInput.blur(), { passive: true });
+
     // Overlay input search
     overlayInput.addEventListener("input", () => {
       clearTimeout(debounceTimer);
