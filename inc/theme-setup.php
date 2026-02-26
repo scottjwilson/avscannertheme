@@ -453,6 +453,74 @@ function avs_breadcrumbs(): void {
 }
 
 /**
+ * Register theme REST endpoint that returns pre-rendered HTML cards.
+ *
+ * Uses the same PHP template as the initial page load, ensuring
+ * infinite-scroll cards are byte-identical to server-rendered ones.
+ */
+function avs_register_cards_endpoint(): void {
+    register_rest_route('avscannertheme/v1', '/cards', [
+        'methods'             => WP_REST_Server::READABLE,
+        'callback'            => 'avs_get_html_cards',
+        'permission_callback' => '__return_true',
+        'args'                => [
+            'page'     => ['default' => 1, 'sanitize_callback' => 'absint'],
+            'per_page' => ['default' => 12, 'sanitize_callback' => 'absint'],
+            'category' => ['default' => '', 'sanitize_callback' => 'sanitize_text_field'],
+            'search'   => ['default' => '', 'sanitize_callback' => 'sanitize_text_field'],
+        ],
+    ]);
+}
+add_action('rest_api_init', 'avs_register_cards_endpoint');
+
+function avs_get_html_cards(WP_REST_Request $request): WP_REST_Response {
+    $args = [
+        'post_type'      => 'fb_post',
+        'post_status'    => 'publish',
+        'posts_per_page' => min((int) $request['per_page'], 100),
+        'paged'          => (int) $request['page'],
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ];
+
+    if ($request['search']) {
+        $args['s'] = $request['search'];
+    }
+
+    if ($request['category']) {
+        $args['tax_query'] = [[
+            'taxonomy' => 'post_category_type',
+            'field'    => 'slug',
+            'terms'    => $request['category'],
+        ]];
+    }
+
+    $query = new WP_Query($args);
+
+    // Prime caches in bulk
+    $post_ids = wp_list_pluck($query->posts, 'ID');
+    if ($post_ids) {
+        update_postmeta_cache($post_ids);
+        update_object_term_cache($post_ids, 'fb_post');
+    }
+
+    $cards = [];
+    while ($query->have_posts()) {
+        $query->the_post();
+        ob_start();
+        get_template_part('template-parts/card-fb-post');
+        $cards[] = ob_get_clean();
+    }
+    wp_reset_postdata();
+
+    $response = new WP_REST_Response(['cards' => $cards], 200);
+    $response->header('X-WP-Total', $query->found_posts);
+    $response->header('X-WP-TotalPages', $query->max_num_pages);
+
+    return $response;
+}
+
+/**
  * TEMPORARY: Delete All Posts admin page for testing.
  */
 function avs_delete_all_posts_menu(): void {

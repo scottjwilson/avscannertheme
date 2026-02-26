@@ -90,6 +90,10 @@ function avs_open_graph(): void {
         $og['og:url']         = get_permalink();
         $img = get_the_post_thumbnail_url(null, 'large');
         if (!$img) $img = get_post_meta(get_the_ID(), '_fb_full_picture', true);
+        if (!$img) {
+            $logo_id = get_theme_mod('custom_logo');
+            if ($logo_id) $img = wp_get_attachment_image_url($logo_id, 'full');
+        }
         if ($img) $og['og:image'] = $img;
     } elseif (is_front_page()) {
         $og['og:type']        = 'website';
@@ -104,6 +108,8 @@ function avs_open_graph(): void {
         $og['og:title']       = $term->name . ' — ' . get_bloginfo('name');
         $og['og:description'] = $term->description ?: sprintf('Browse %s posts', $term->name);
         $og['og:url']         = get_term_link($term);
+        $logo_id = get_theme_mod('custom_logo');
+        if ($logo_id) $og['og:image'] = wp_get_attachment_image_url($logo_id, 'full');
     }
 
     foreach ($og as $prop => $content) {
@@ -127,6 +133,10 @@ function avs_twitter_card(): void {
         $card['twitter:description'] = wp_trim_words(get_the_excerpt() ?: wp_strip_all_tags(get_the_content()), 25, '…');
         $img = get_the_post_thumbnail_url(null, 'large');
         if (!$img) $img = get_post_meta(get_the_ID(), '_fb_full_picture', true);
+        if (!$img) {
+            $logo_id = get_theme_mod('custom_logo');
+            if ($logo_id) $img = wp_get_attachment_image_url($logo_id, 'full');
+        }
         if ($img) $card['twitter:image'] = $img;
     } elseif (is_front_page()) {
         $card['twitter:title']       = get_bloginfo('name');
@@ -215,3 +225,55 @@ function avs_json_ld(): void {
     }
 }
 add_action('wp_head', 'avs_json_ld', 5);
+
+/**
+ * Add <lastmod> to each post entry in the WP core sitemap.
+ */
+function avs_sitemap_post_lastmod(array $entry, WP_Post $post): array {
+    $entry['lastmod'] = get_the_modified_date('c', $post);
+    return $entry;
+}
+add_filter('wp_sitemaps_posts_entry', 'avs_sitemap_post_lastmod', 10, 2);
+
+/**
+ * Exclude advertisement category posts from the sitemap.
+ */
+function avs_sitemap_exclude_ads(array $args, string $post_type): array {
+    if ($post_type !== 'fb_post') return $args;
+    $ad_ids = function_exists('avscanner_get_ad_term_id') ? avscanner_get_ad_term_id() : [];
+    if ($ad_ids) {
+        $args['tax_query'] = [[
+            'taxonomy' => 'post_category_type',
+            'field'    => 'term_id',
+            'terms'    => $ad_ids,
+            'operator' => 'NOT IN',
+        ]];
+    }
+    return $args;
+}
+add_filter('wp_sitemaps_posts_query_args', 'avs_sitemap_exclude_ads', 10, 2);
+
+/**
+ * Add <lastmod> to taxonomy entries using the most recent post date in that term.
+ */
+function avs_sitemap_taxonomy_lastmod(array $entry, WP_Term $term, string $taxonomy): array {
+    $latest = get_posts([
+        'post_type'      => 'fb_post',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+        'orderby'        => 'modified',
+        'order'          => 'DESC',
+        'no_found_rows'  => true,
+        'fields'         => 'ids',
+        'tax_query'      => [[
+            'taxonomy' => $taxonomy,
+            'field'    => 'term_id',
+            'terms'    => $term->term_id,
+        ]],
+    ]);
+    if ($latest) {
+        $entry['lastmod'] = get_post_modified_time('c', false, $latest[0]);
+    }
+    return $entry;
+}
+add_filter('wp_sitemaps_taxonomies_entry', 'avs_sitemap_taxonomy_lastmod', 10, 3);

@@ -234,12 +234,6 @@ import "../css/front-page.css";
   // ========================================
   // INFINITE SCROLL
   // ========================================
-  function escHTML(str) {
-    const div = document.createElement("div");
-    div.textContent = str || "";
-    return div.innerHTML;
-  }
-
   function createSkeletons(count) {
     const template = document.getElementById("card-skeleton");
     if (!template) return [];
@@ -248,61 +242,6 @@ import "../css/front-page.css";
       el.classList.add("infinite-scroll-skeleton");
       return el;
     });
-  }
-
-  function buildCard(post) {
-    const article = document.createElement("article");
-    const isAd = post.categories_detail?.some((c) => c.slug === "advertisement");
-    article.className = "card card-hover" + (isAd ? " card-sponsored" : "");
-
-    let imageHTML = "";
-    if (post.thumbnail_url || post.thumbnail_html) {
-      const videoClass = post.video_url ? " has-video" : "";
-      const playIcon = post.video_url
-        ? '<span class="card-play-icon" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="rgba(0,0,0,0.6)"/><path d="M19 15l14 9-14 9V15z" fill="white"/></svg></span>'
-        : "";
-      const imgTag = post.thumbnail_html
-        ? post.thumbnail_html
-        : `<img src="${post.thumbnail_url}" alt="${escHTML(post.title)}" loading="lazy" decoding="async">`;
-      imageHTML = `<a href="${post.permalink}" class="card-image-link${videoClass}"><div class="card-image">${imgTag}${playIcon}</div></a>`;
-    }
-
-    let badgesHTML = "";
-    if (post.categories_detail?.length) {
-      if (isAd) {
-        badgesHTML =
-          '<div class="card-badges"><span class="badge badge-sponsored">Sponsored</span></div>';
-      } else {
-        badgesHTML =
-          '<div class="card-badges">' +
-          post.categories_detail
-            .map(
-              (c) =>
-                `<a href="${c.link}" class="badge badge-${c.slug}">${escHTML(c.name)}</a>`,
-            )
-            .join("") +
-          "</div>";
-      }
-    }
-
-    let sourceHTML = "";
-    if (post.shared_url) {
-      try {
-        const host = new URL(post.shared_url).hostname;
-        sourceHTML = `<span class="card-source">via ${escHTML(host)}</span>`;
-      } catch (e) {}
-    }
-
-    article.innerHTML = `
-        ${imageHTML}
-        <span class="card-date">${escHTML(post.date_short)} at ${escHTML(post.time)}</span>
-        ${badgesHTML}
-        ${sourceHTML}
-        <h3 class="card-title"><a href="${post.permalink}">${escHTML(post.title)}</a></h3>
-        <p class="card-text">${escHTML(post.excerpt_short)}</p>
-        <a href="${post.permalink}" class="card-link">Read more <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4.167 10h11.666M10 4.167L15.833 10 10 15.833" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    `;
-    return article;
   }
 
   function initInfiniteScroll() {
@@ -365,24 +304,23 @@ import "../css/front-page.css";
           if (category) params.set("category", category);
 
           const resp = await fetch(
-            `/wp-json/avscanner/v1/posts?${params}`,
+            `/wp-json/avscannertheme/v1/cards?${params}`,
           );
           if (!resp.ok) throw new Error(resp.statusText);
 
-          const posts = await resp.json();
+          const data = await resp.json();
           const newTotal =
             parseInt(resp.headers.get("X-WP-TotalPages")) || totalPages;
 
           // Remove skeletons
           skeletons.forEach((s) => s.remove());
 
-          // Render cards
-          posts.forEach((post) => {
-            const card = buildCard(post);
-            grid.appendChild(card);
+          // Insert pre-rendered HTML cards
+          data.cards.forEach((html) => {
+            grid.insertAdjacentHTML("beforeend", html);
           });
 
-          scrollStatus.textContent = `Loaded ${posts.length} more posts`;
+          scrollStatus.textContent = `Loaded ${data.cards.length} more posts`;
 
           currentPage++;
           grid.dataset.currentPage = currentPage;
@@ -414,6 +352,12 @@ import "../css/front-page.css";
   // ========================================
   // INLINE / AJAX SEARCH
   // ========================================
+  function escHTML(str) {
+    const div = document.createElement("div");
+    div.textContent = str || "";
+    return div.innerHTML;
+  }
+
   function initInlineSearch() {
     const input = document.getElementById("header-search-input");
     const dropdown = document.getElementById("search-dropdown");
@@ -599,6 +543,8 @@ import "../css/front-page.css";
         const formAction = overlayInput.closest("form").action;
         doSearch(query, overlayResults, formAction);
       }
+      // Trap focus within overlay
+      overlay.addEventListener("keydown", trapFocus);
     }
 
     function closeOverlay() {
@@ -608,6 +554,29 @@ import "../css/front-page.css";
       window.scrollTo(0, savedScrollY);
       renderResults(overlayResults, "");
       activeIndex = -1;
+      overlay.removeEventListener("keydown", trapFocus);
+      searchTrigger.focus();
+    }
+
+    function trapFocus(e) {
+      if (e.key !== "Tab") return;
+      const focusable = overlay.querySelectorAll(
+        'button, [href], input, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     }
 
     searchTrigger.addEventListener("click", openOverlay);
