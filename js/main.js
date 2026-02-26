@@ -424,7 +424,7 @@ import "../css/front-page.css";
             p.categories_detail?.length
               ? `<span class="badge badge-${p.categories_detail[0].slug}">${escHTML(p.categories_detail[0].name)}</span>`
               : "";
-          return `<a class="search-dropdown-item" href="${p.permalink}" role="option">
+          return `<a class="search-dropdown-item" href="${p.permalink}" role="option" tabindex="-1">
             ${thumb}
             <span class="search-dropdown-body">
               <span class="search-dropdown-title">${escHTML(p.title)}</span>
@@ -434,7 +434,7 @@ import "../css/front-page.css";
         })
         .join("");
 
-      const footerHTML = `<a class="search-dropdown-footer" href="${formAction}?s=${encodeURIComponent(query)}&post_type=fb_post">View all results \u2192</a>`;
+      const footerHTML = `<a class="search-dropdown-footer" href="${formAction}?s=${encodeURIComponent(query)}&post_type=fb_post" tabindex="-1">View all results \u2192</a>`;
 
       return itemsHTML + footerHTML;
     }
@@ -491,6 +491,12 @@ import "../css/front-page.css";
 
     input.addEventListener("keydown", (e) => {
       if (dropdown.hidden) return;
+
+      if (e.key === "Tab") {
+        hideDropdown();
+        return;
+      }
+
       const items = getItems(dropdown);
       if (!items.length) return;
 
