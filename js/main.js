@@ -322,6 +322,13 @@ import "../css/front-page.css";
       const loadMoreBtn = controls.querySelector(".infinite-scroll-load-more");
       const status = controls.querySelector(".infinite-scroll-status");
 
+      // ARIA live region for screen reader announcements
+      const scrollStatus = document.createElement('div');
+      scrollStatus.className = 'sr-only';
+      scrollStatus.setAttribute('aria-live', 'polite');
+      scrollStatus.setAttribute('aria-atomic', 'true');
+      grid.parentNode.insertBefore(scrollStatus, grid.nextSibling);
+
       if (currentPage >= totalPages) return; // No more pages
 
       // IntersectionObserver on sentinel
@@ -374,6 +381,8 @@ import "../css/front-page.css";
             const card = buildCard(post);
             grid.appendChild(card);
           });
+
+          scrollStatus.textContent = `Loaded ${posts.length} more posts`;
 
           currentPage++;
           grid.dataset.currentPage = currentPage;
