@@ -53,17 +53,17 @@ $footer_categories = get_terms([
             <!-- Contact Column -->
             <div class="footer-col">
                 <h4 class="footer-heading"><?php esc_html_e('Contact', 'avscannertheme'); ?></h4>
+                <div class="footer-contact-email">
+                    <span class="footer-contact-label"><?php echo avs_icon('mail', 14); ?> Email</span>
+                    <a href="mailto:admin@avscannernews.com">admin@avscannernews.com</a>
+                </div>
                 <ul class="footer-contact-list">
                     <li>
-                        <span class="footer-contact-label"><?php echo avs_icon('mail', 14); ?> Email</span>
-                        <a href="mailto:admin@avscannernews.com">admin@avscannernews.com</a>
-                    </li>
-                    <li>
-                        <span class="footer-contact-label"><?php echo avs_icon('phone', 14); ?> City of Palmdale</span>
+                        <span class="footer-contact-label"><?php echo avs_icon('phone', 14); ?> Palmdale</span>
                         <a href="tel:+16612675100">(661) 267-5100</a>
                     </li>
                     <li>
-                        <span class="footer-contact-label"><?php echo avs_icon('phone', 14); ?> City of Lancaster</span>
+                        <span class="footer-contact-label"><?php echo avs_icon('phone', 14); ?> Lancaster</span>
                         <a href="tel:+16617236000">(661) 723-6000</a>
                     </li>
                     <li>
