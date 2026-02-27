@@ -32,11 +32,6 @@
     }
 }
 
-@media (min-width: 1024px) {
-    .footer-grid {
-        grid-template-columns: 1fr 1.5fr 1fr 1fr;
-    }
-}
 
 /* ========================================
    BRAND COLUMN
@@ -210,62 +205,6 @@
     color: var(--color-primary-400);
 }
 
-/* ========================================
-   CONTACT LIST
-   ======================================== */
-
-.footer-contact-email {
-    margin-bottom: var(--space-4);
-    padding-bottom: var(--space-3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.footer-contact-email a {
-    font-size: var(--text-sm);
-    color: var(--color-dark-300);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-}
-
-.footer-contact-email a:hover {
-    color: var(--color-primary-400);
-}
-
-.footer-contact-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-3) var(--space-4);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-contact-label {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-    font-size: var(--text-xs);
-    color: var(--color-dark-500);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-wider);
-    font-weight: 600;
-    margin-bottom: 2px;
-}
-
-.footer-contact-label svg {
-    flex-shrink: 0;
-}
-
-.footer-contact-list a {
-    font-size: var(--text-sm);
-    color: var(--color-dark-300);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-}
-
-.footer-contact-list a:hover {
-    color: var(--color-primary-400);
-}
 
 /* ========================================
    SOCIAL ICONS
