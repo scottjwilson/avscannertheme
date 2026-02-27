@@ -32,6 +32,12 @@
     }
 }
 
+@media (min-width: 1024px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1.5fr 1fr 1fr;
+    }
+}
+
 /* ========================================
    BRAND COLUMN
    ======================================== */
@@ -202,6 +208,80 @@
 
 .footer-links a:hover {
     color: var(--color-primary-400);
+}
+
+/* ========================================
+   CONTACT LIST
+   ======================================== */
+
+.footer-contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-contact-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--color-dark-500);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.footer-contact-label svg {
+    flex-shrink: 0;
+}
+
+.footer-contact-list a {
+    font-size: var(--text-sm);
+    color: var(--color-dark-300);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer-contact-list a:hover {
+    color: var(--color-primary-400);
+}
+
+/* ========================================
+   SOCIAL ICONS
+   ======================================== */
+
+.footer-social {
+    display: flex;
+    gap: var(--space-3);
+    justify-content: center;
+}
+
+@media (min-width: 768px) {
+    .footer-social {
+        justify-content: flex-start;
+    }
+}
+
+.footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--color-dark-400);
+    transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.footer-social-link:hover {
+    color: white;
+    border-color: var(--color-primary-500);
+    background: rgba(220, 38, 38, 0.1);
 }
 
 /* ========================================

@@ -709,6 +709,69 @@ import "../css/front-page.css";
   }
 
   // ========================================
+  // SCANNER CODES SEARCH
+  // ========================================
+  function initCodesSearch() {
+    const input = document.getElementById("codes-search-input");
+    if (!input) return;
+
+    const sections = document.querySelectorAll(".codes-section");
+    const rows = document.querySelectorAll(".codes-row");
+    const matchCount = document.getElementById("codes-match-count");
+    const emptyState = document.getElementById("codes-empty");
+    const navTabs = document.querySelectorAll(".codes-nav-tab");
+
+    input.addEventListener("input", () => {
+      const query = input.value.trim().toLowerCase();
+
+      if (!query) {
+        rows.forEach((row) => (row.hidden = false));
+        sections.forEach((s) => s.classList.remove("is-hidden"));
+        if (matchCount) matchCount.hidden = true;
+        if (emptyState) emptyState.hidden = true;
+        return;
+      }
+
+      let total = 0;
+
+      rows.forEach((row) => {
+        const code = row.dataset.code || "";
+        const desc = row.dataset.desc || "";
+        const match = code.includes(query) || desc.includes(query);
+        row.hidden = !match;
+        if (match) total++;
+      });
+
+      // Hide sections with no visible rows
+      sections.forEach((section) => {
+        const visible = section.querySelectorAll(".codes-row:not([hidden])");
+        section.classList.toggle("is-hidden", visible.length === 0);
+      });
+
+      // Match count
+      if (matchCount) {
+        matchCount.textContent = `${total} result${total !== 1 ? "s" : ""}`;
+        matchCount.hidden = false;
+      }
+
+      // Empty state
+      if (emptyState) {
+        emptyState.hidden = total > 0;
+      }
+    });
+
+    // Section nav: clear search and highlight active tab
+    navTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        input.value = "";
+        input.dispatchEvent(new Event("input"));
+        navTabs.forEach((t) => t.classList.remove("is-active"));
+        tab.classList.add("is-active");
+      });
+    });
+  }
+
+  // ========================================
   // INITIALIZE
   // ========================================
   function init() {
@@ -739,6 +802,7 @@ import "../css/front-page.css";
     setCurrentYear();
     initBackToTop();
     initShareButtons();
+    initCodesSearch();
   }
 
   if (document.readyState === "loading") {

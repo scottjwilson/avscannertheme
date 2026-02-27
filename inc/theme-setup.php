@@ -279,6 +279,18 @@ function avs_icon($name, $size = 20): string
             '" height="' .
             $size .
             '" viewBox="0 0 20 20" fill="none"><path d="M8.333 10.833a4.167 4.167 0 006.25.459l2.084-2.084a4.167 4.167 0 00-5.892-5.892L9.583 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.667 9.167a4.167 4.167 0 00-6.25-.459L3.333 10.792a4.167 4.167 0 005.892 5.892l1.184-1.184" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        "instagram" =>
+            '<svg width="' .
+            $size .
+            '" height="' .
+            $size .
+            '" viewBox="0 0 20 20" fill="none"><rect x="2.5" y="2.5" width="15" height="15" rx="4" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="3.333" stroke="currentColor" stroke-width="1.5"/><circle cx="14.375" cy="5.625" r="1" fill="currentColor"/></svg>',
+        "phone" =>
+            '<svg width="' .
+            $size .
+            '" height="' .
+            $size .
+            '" viewBox="0 0 20 20" fill="none"><path d="M18.333 14.1v2.5a1.667 1.667 0 01-1.816 1.667 16.492 16.492 0 01-7.192-2.559 16.25 16.25 0 01-5-5 16.492 16.492 0 01-2.558-7.225A1.667 1.667 0 013.433 1.667h2.5A1.667 1.667 0 017.6 3.1c.106.8.303 1.585.584 2.342a1.667 1.667 0 01-.375 1.758L6.7 8.308a13.333 13.333 0 005 5l1.108-1.108a1.667 1.667 0 011.758-.375c.757.281 1.542.478 2.342.584a1.667 1.667 0 011.425 1.692z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     ];
 
     return $icons[$name] ?? "";
