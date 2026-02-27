@@ -1,9 +1,8 @@
 <?php
 /**
- * Template Name: Scanner Codes
- * Template Post Type: page
+ * Page Template: Scanner Codes
  *
- * Auto-applies to slug "codes".
+ * Auto-applies to pages with slug "codes" via WordPress page-{slug}.php hierarchy.
  *
  * @package AVScannerTheme
  */

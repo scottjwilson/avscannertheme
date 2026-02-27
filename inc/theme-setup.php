@@ -50,6 +50,15 @@ function avs_setup(): void
 add_action("after_setup_theme", "avs_setup");
 
 /**
+ * Add a top-priority rewrite rule for the "codes" page so
+ * the post_category_type taxonomy doesn't intercept /codes/.
+ */
+function avs_codes_page_rewrite(): void {
+    add_rewrite_rule('^codes/?$', 'index.php?pagename=codes', 'top');
+}
+add_action('init', 'avs_codes_page_rewrite');
+
+/**
  * Generate WebP sub-sizes for JPEG/PNG uploads (WP 5.8+).
  * The original full-size upload stays as-is; only thumbnails convert.
  * Falls back silently if the server lacks WebP support in GD/Imagick.
