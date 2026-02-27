@@ -249,6 +249,36 @@ function avs_icon($name, $size = 20): string
             '" height="' .
             $size .
             '" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        "share" =>
+            '<svg width="' .
+            $size .
+            '" height="' .
+            $size .
+            '" viewBox="0 0 20 20" fill="none"><path d="M3.333 10v6.667c0 .916.75 1.666 1.667 1.666h10c.917 0 1.667-.75 1.667-1.666V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.333 5L10 1.667 6.667 5M10 1.667V12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        "facebook" =>
+            '<svg width="' .
+            $size .
+            '" height="' .
+            $size .
+            '" viewBox="0 0 20 20" fill="none"><path d="M11.667 11.25h2.083l.833-3.333h-2.916V6.25c0-.858 0-1.667 1.666-1.667h1.25V1.583A18.2 18.2 0 0012.083 1.5c-2.525 0-4.25 1.542-4.25 4.375v2.042H5.417v3.333h2.416V18.5h3.834V11.25z" fill="currentColor"/></svg>',
+        "x-twitter" =>
+            '<svg width="' .
+            $size .
+            '" height="' .
+            $size .
+            '" viewBox="0 0 20 20" fill="none"><path d="M11.508 8.892L17.47 2H16.007l-5.177 5.985L6.596 2H2l6.246 9.032L2 18.5h1.462l5.463-6.313L13.404 18.5H18l-6.492-9.608zm-1.934 2.235l-.633-.9L3.96 3.1h2.17l4.065 5.78.633.9L16.008 17.46h-2.17l-4.264-6.333z" fill="currentColor"/></svg>',
+        "sms" =>
+            '<svg width="' .
+            $size .
+            '" height="' .
+            $size .
+            '" viewBox="0 0 20 20" fill="none"><path d="M17.5 9.583a7.13 7.13 0 01-.767 3.25 7.25 7.25 0 01-6.483 4A7.13 7.13 0 017 16.067L2.5 17.5l1.433-4.5a7.13 7.13 0 01-.766-3.25 7.25 7.25 0 014-6.483A7.13 7.13 0 0110.417 2.5h.416a7.233 7.233 0 016.667 6.667v.416z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        "link" =>
+            '<svg width="' .
+            $size .
+            '" height="' .
+            $size .
+            '" viewBox="0 0 20 20" fill="none"><path d="M8.333 10.833a4.167 4.167 0 006.25.459l2.084-2.084a4.167 4.167 0 00-5.892-5.892L9.583 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.667 9.167a4.167 4.167 0 00-6.25-.459L3.333 10.792a4.167 4.167 0 005.892 5.892l1.184-1.184" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     ];
 
     return $icons[$name] ?? "";

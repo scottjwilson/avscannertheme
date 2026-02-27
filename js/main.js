@@ -677,6 +677,38 @@ import "../css/front-page.css";
   }
 
   // ========================================
+  // SHARE BUTTONS
+  // ========================================
+  function initShareButtons() {
+    // Native share (mobile) — hide desktop buttons, show native button
+    const hasNativeShare = !!navigator.share;
+    document.querySelectorAll(".share-btn-native").forEach((btn) => {
+      if (!hasNativeShare) return;
+      btn.hidden = false;
+      btn.nextElementSibling?.classList.add("share-buttons-hidden");
+      btn.addEventListener("click", async () => {
+        try {
+          await navigator.share({
+            title: btn.dataset.shareTitle,
+            url: btn.dataset.shareUrl,
+          });
+        } catch {}
+      });
+    });
+
+    // Copy link button (desktop)
+    document.querySelectorAll(".copy-link-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(btn.dataset.url || location.href);
+          btn.classList.add("is-copied");
+          setTimeout(() => btn.classList.remove("is-copied"), 2000);
+        } catch {}
+      });
+    });
+  }
+
+  // ========================================
   // INITIALIZE
   // ========================================
   function init() {
@@ -706,6 +738,7 @@ import "../css/front-page.css";
     initImageFadeIn();
     setCurrentYear();
     initBackToTop();
+    initShareButtons();
   }
 
   if (document.readyState === "loading") {

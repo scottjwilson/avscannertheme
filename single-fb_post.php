@@ -107,16 +107,34 @@ get_header(); ?>
             </div>
         <?php endif; ?>
 
-        <?php if ($fb_link): ?>
-            <div class="single-fb-link">
+        <div class="single-actions">
+            <?php if ($fb_link): ?>
                 <a href="<?php echo esc_url($fb_link); ?>"
                    class="btn btn-outline"
                    target="_blank"
                    rel="noopener noreferrer">
                     <?php esc_html_e("View on Facebook", "avscannertheme"); ?> <?php echo avs_icon("arrow-up-right", 16); ?>
                 </a>
+            <?php endif; ?>
+            <?php
+            $share_url   = get_permalink();
+            $share_title = get_the_title();
+            ?>
+            <button type="button" class="btn btn-outline share-btn-native"
+                    data-share-url="<?php echo esc_url($share_url); ?>"
+                    data-share-title="<?php echo esc_attr($share_title); ?>">
+                <?php echo avs_icon('share', 16); ?> Share
+            </button>
+            <div class="share-buttons">
+                <a class="btn btn-outline share-btn" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo rawurlencode($share_url); ?>" target="_blank" rel="noopener noreferrer" title="Share on Facebook"><?php echo avs_icon('facebook', 16); ?></a>
+                <a class="btn btn-outline share-btn" href="https://twitter.com/intent/tweet?url=<?php echo rawurlencode($share_url); ?>&text=<?php echo rawurlencode($share_title); ?>" target="_blank" rel="noopener noreferrer" title="Share on X"><?php echo avs_icon('x-twitter', 16); ?></a>
+                <a class="btn btn-outline share-btn" href="mailto:?subject=<?php echo rawurlencode($share_title); ?>&body=<?php echo rawurlencode($share_url); ?>" title="Share via Email"><?php echo avs_icon('mail', 16); ?></a>
+                <button type="button" class="btn btn-outline share-btn copy-link-btn" data-url="<?php echo esc_url($share_url); ?>" title="Copy link">
+                    <span class="copy-link-icon"><?php echo avs_icon('link', 16); ?></span>
+                    <span class="copy-link-check"><?php echo avs_icon('check', 16); ?></span>
+                </button>
             </div>
-        <?php endif; ?>
+        </div>
 
     </div>
 
