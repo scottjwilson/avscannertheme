@@ -253,6 +253,48 @@ $sections = [
             <span class="codes-match-count" id="codes-match-count" hidden></span>
         </div>
 
+        <!-- Local Numbers -->
+        <div class="codes-local-numbers">
+            <h2 class="codes-section-title">Local Numbers</h2>
+            <div class="codes-local-grid">
+                <a href="mailto:admin@avscannernews.com" class="codes-local-item">
+                    <?php echo avs_icon('mail', 16); ?>
+                    <span class="codes-local-name">Email</span>
+                    <span class="codes-local-value">admin@avscannernews.com</span>
+                </a>
+                <a href="tel:+16612675100" class="codes-local-item">
+                    <?php echo avs_icon('phone', 16); ?>
+                    <span class="codes-local-name">City of Palmdale</span>
+                    <span class="codes-local-value">(661) 267-5100</span>
+                </a>
+                <a href="tel:+16617236000" class="codes-local-item">
+                    <?php echo avs_icon('phone', 16); ?>
+                    <span class="codes-local-name">City of Lancaster</span>
+                    <span class="codes-local-value">(661) 723-6000</span>
+                </a>
+                <a href="tel:+16612722400" class="codes-local-item">
+                    <?php echo avs_icon('phone', 16); ?>
+                    <span class="codes-local-name">Palmdale Sheriff</span>
+                    <span class="codes-local-value">(661) 272-2400</span>
+                </a>
+                <a href="tel:+16619488466" class="codes-local-item">
+                    <?php echo avs_icon('phone', 16); ?>
+                    <span class="codes-local-name">Lancaster Sheriff</span>
+                    <span class="codes-local-value">(661) 948-8466</span>
+                </a>
+                <a href="tel:+16619488541" class="codes-local-item">
+                    <?php echo avs_icon('phone', 16); ?>
+                    <span class="codes-local-name">CHP Antelope Valley</span>
+                    <span class="codes-local-value">(661) 948-8541</span>
+                </a>
+                <a href="tel:+13232593200" class="codes-local-item">
+                    <?php echo avs_icon('phone', 16); ?>
+                    <span class="codes-local-name">CHP After Hours</span>
+                    <span class="codes-local-value">(323) 259-3200</span>
+                </a>
+            </div>
+        </div>
+
         <!-- Section Nav -->
         <nav class="codes-nav" aria-label="Code sections">
             <?php foreach ($sections as $key => $section): ?>
