@@ -65,6 +65,16 @@ $footer_categories = get_terms([
             <?php endif; ?>
         </div>
 
+        <div class="footer-contact-bar">
+            <a href="mailto:admin@avscannernews.com"><?php echo avs_icon('mail', 14); ?> admin@avscannernews.com</a>
+            <a href="tel:+16612675100"><?php echo avs_icon('phone', 14); ?> City of Palmdale <span>(661) 267-5100</span></a>
+            <a href="tel:+16617236000"><?php echo avs_icon('phone', 14); ?> City of Lancaster <span>(661) 723-6000</span></a>
+            <a href="tel:+16612722400"><?php echo avs_icon('phone', 14); ?> Palmdale Sheriff <span>(661) 272-2400</span></a>
+            <a href="tel:+16619488466"><?php echo avs_icon('phone', 14); ?> Lancaster Sheriff <span>(661) 948-8466</span></a>
+            <a href="tel:+16619488541"><?php echo avs_icon('phone', 14); ?> CHP AV <span>(661) 948-8541</span></a>
+            <a href="tel:+13232593200"><?php echo avs_icon('phone', 14); ?> CHP After Hours <span>(323) 259-3200</span></a>
+        </div>
+
         <div class="footer-bottom">
             <p>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?></p>
             <div class="footer-social">
