@@ -270,18 +270,7 @@ import "../css/front-page.css";
 
       if (currentPage >= totalPages) return; // No more pages
 
-      // IntersectionObserver on sentinel
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting && !loading) {
-            loadNextPage();
-          }
-        },
-        { rootMargin: "200px" },
-      );
-      observer.observe(sentinel);
-
-      // Manual fallback button
+      // Show Load More button — user clicks to fetch next page
       loadMoreBtn.hidden = false;
       loadMoreBtn.addEventListener("click", loadNextPage);
 
@@ -326,7 +315,6 @@ import "../css/front-page.css";
           grid.dataset.currentPage = currentPage;
 
           if (currentPage >= newTotal) {
-            observer.disconnect();
             loadMoreBtn.hidden = true;
             status.hidden = false;
             status.textContent = "All posts loaded";

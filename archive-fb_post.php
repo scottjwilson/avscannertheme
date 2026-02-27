@@ -17,7 +17,7 @@ get_header(); ?>
         <?php if (have_posts()): ?>
             <div class="grid grid-3 stagger-children reveal"
                  data-infinite-scroll
-                 data-per-page="12"
+                 data-per-page="15"
                  data-total-pages="<?php echo (int) $wp_query->max_num_pages; ?>"
                  data-current-page="1">
                 <?php

@@ -12,7 +12,7 @@ $paged = get_query_var('paged') ? get_query_var('paged') : 1;
 $posts_query = new WP_Query([
     'post_type'      => 'fb_post',
     'post_status'    => 'publish',
-    'posts_per_page' => 12,
+    'posts_per_page' => 15,
     'paged'          => $paged,
 ]);
 ?>
@@ -27,7 +27,7 @@ $posts_query = new WP_Query([
         <?php if ($posts_query->have_posts()): ?>
             <div class="grid grid-3 stagger-children reveal"
                  data-infinite-scroll
-                 data-per-page="12"
+                 data-per-page="15"
                  data-total-pages="<?php echo (int) $posts_query->max_num_pages; ?>"
                  data-current-page="1">
                 <?php

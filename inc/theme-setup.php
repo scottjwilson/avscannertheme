@@ -324,11 +324,11 @@ function avs_taxonomy_query_fb_posts($query): void
 
     if ($query->is_tax("post_category_type")) {
         $query->set("post_type", "fb_post");
-        $query->set("posts_per_page", 12);
+        $query->set("posts_per_page", 15);
     }
 
     if ($query->is_post_type_archive("fb_post")) {
-        $query->set("posts_per_page", 12);
+        $query->set("posts_per_page", 15);
     }
 }
 add_action("pre_get_posts", "avs_taxonomy_query_fb_posts");
@@ -507,7 +507,7 @@ function avs_register_cards_endpoint(): void {
         'permission_callback' => '__return_true',
         'args'                => [
             'page'     => ['default' => 1, 'sanitize_callback' => 'absint'],
-            'per_page' => ['default' => 12, 'sanitize_callback' => 'absint'],
+            'per_page' => ['default' => 15, 'sanitize_callback' => 'absint'],
             'category' => ['default' => '', 'sanitize_callback' => 'sanitize_text_field'],
             'search'   => ['default' => '', 'sanitize_callback' => 'sanitize_text_field'],
         ],
