@@ -697,6 +697,123 @@ import "../css/front-page.css";
   }
 
   // ========================================
+  // HERO SCANNER SHADER
+  // ========================================
+  function initHeroShader() {
+    const canvas = document.getElementById("hero-scanner");
+    if (!canvas) return;
+
+    const gl = canvas.getContext("webgl", { alpha: true, antialias: false });
+    if (!gl) return;
+
+    const vertSrc = `
+      attribute vec2 a_pos;
+      void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
+    `;
+
+    const fragSrc = `
+      precision mediump float;
+      uniform float u_time;
+      uniform vec2 u_res;
+
+      void main() {
+        vec2 uv = gl_FragCoord.xy / u_res;
+        // Center point for sweep — right side, vertically centered
+        vec2 center = vec2(0.85, 0.5);
+        vec2 d = uv - center;
+        float aspect = u_res.x / u_res.y;
+        d.x *= aspect;
+
+        float angle = atan(d.y, d.x);
+        float dist = length(d);
+
+        // Sweep — slow rotation
+        float sweep = u_time * 0.4;
+        float diff = mod(angle - sweep, 6.2832);
+
+        // Soft fade trail behind sweep line
+        float trail = smoothstep(0.0, 1.0, diff) * (1.0 - smoothstep(1.0, 2.8, diff));
+        trail *= smoothstep(0.8, 0.0, dist);
+
+        // Concentric rings
+        float rings = sin(dist * 20.0 - u_time * 0.5) * 0.5 + 0.5;
+        rings = smoothstep(0.42, 0.58, rings) * 0.15;
+        rings *= smoothstep(0.7, 0.0, dist);
+
+        // Subtle grid dots
+        vec2 grid = fract(uv * vec2(40.0, 20.0));
+        float dots = step(0.9, max(grid.x, grid.y)) * 0.04;
+
+        // Center glow
+        float glow = smoothstep(0.15, 0.0, dist) * 0.25;
+
+        // Combine — deep red/crimson tones
+        float intensity = trail * 0.3 + rings + dots + glow;
+        vec3 color = vec3(0.86, 0.1, 0.1) * intensity;
+
+        gl_FragColor = vec4(color, intensity);
+      }
+    `;
+
+    function compile(type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      return s;
+    }
+
+    const prog = gl.createProgram();
+    gl.attachShader(prog, compile(gl.VERTEX_SHADER, vertSrc));
+    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fragSrc));
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+
+    const aPos = gl.getAttribLocation(prog, "a_pos");
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+    const uTime = gl.getUniformLocation(prog, "u_time");
+    const uRes = gl.getUniformLocation(prog, "u_res");
+
+    let raf;
+    let running = false;
+
+    function resize() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio, 2);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+
+    function render(t) {
+      gl.uniform1f(uTime, t * 0.001);
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      if (running) raf = requestAnimationFrame(render);
+    }
+
+    // Only run when hero is visible
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !running) {
+        running = true;
+        resize();
+        raf = requestAnimationFrame(render);
+      } else if (!entry.isIntersecting && running) {
+        running = false;
+        cancelAnimationFrame(raf);
+      }
+    });
+    observer.observe(canvas);
+
+    window.addEventListener("resize", () => { if (running) resize(); }, { passive: true });
+  }
+
+  // ========================================
   // SCANNER CODES SEARCH
   // ========================================
   function initCodesSearch() {
@@ -791,6 +908,7 @@ import "../css/front-page.css";
     initBackToTop();
     initShareButtons();
     initCodesSearch();
+    if (!prefersReducedMotion) initHeroShader();
   }
 
   if (document.readyState === "loading") {

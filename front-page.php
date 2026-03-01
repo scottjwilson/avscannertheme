@@ -15,14 +15,59 @@ $posts_query = new WP_Query([
     'posts_per_page' => 15,
     'paged'          => $paged,
 ]);
+
+// Stats for hero
+$total_posts = wp_count_posts('fb_post');
+$incident_count = (int) ($total_posts->publish ?? 0);
+
+$latest_post = get_posts([
+    'post_type'      => 'fb_post',
+    'post_status'    => 'publish',
+    'posts_per_page' => 1,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+    'fields'         => 'ids',
+]);
+$last_updated = $latest_post ? human_time_diff(get_post_time('U', false, $latest_post[0])) . ' ago' : '';
+
+$nav_categories = get_terms([
+    'taxonomy'   => 'post_category_type',
+    'hide_empty' => true,
+    'exclude'    => avscanner_get_ad_term_id(),
+]);
+$category_count = !is_wp_error($nav_categories) ? count($nav_categories) : 0;
 ?>
+
+<section class="front-hero">
+    <canvas class="front-hero-canvas" id="hero-scanner"></canvas>
+    <div class="container">
+        <div class="front-hero-inner">
+            <div class="front-hero-text">
+                <h1 class="front-hero-title"><?php bloginfo('name'); ?></h1>
+                <p class="front-hero-tagline"><?php bloginfo('description'); ?></p>
+            </div>
+            <div class="front-hero-stats">
+                <div class="front-hero-stat">
+                    <span class="front-hero-stat-value"><?php echo number_format($incident_count); ?></span>
+                    <span class="front-hero-stat-label">Incidents Tracked</span>
+                </div>
+                <div class="front-hero-stat">
+                    <span class="front-hero-stat-value"><?php echo (int) $category_count; ?></span>
+                    <span class="front-hero-stat-label">Categories</span>
+                </div>
+                <?php if ($last_updated): ?>
+                    <div class="front-hero-stat">
+                        <span class="front-hero-stat-value"><?php echo esc_html($last_updated); ?></span>
+                        <span class="front-hero-stat-label">Last Updated</span>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section class="section">
     <div class="container">
-        <div class="section-header">
-            <span class="text-label"><?php esc_html_e("Scanner Posts", "avscannertheme"); ?></span>
-            <h1 class="text-display"><?php bloginfo('name'); ?></h1>
-        </div>
 
         <?php if ($posts_query->have_posts()): ?>
             <div class="grid grid-3 stagger-children reveal"
