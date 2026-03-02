@@ -135,4 +135,127 @@
     }
 }
 
-/* Mobile menu toggle and nav removed — category bar is primary navigation */
+/* ========================================
+   MOBILE MENU TOGGLE
+   ======================================== */
+
+.menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.menu-toggle:hover {
+    background: var(--bg-interactive-hover);
+}
+
+.menu-toggle-close {
+    display: none;
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle-open {
+    display: none;
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle-close {
+    display: flex;
+}
+
+@media (max-width: 639px) {
+    .menu-toggle {
+        display: flex;
+    }
+}
+
+/* ========================================
+   MOBILE NAV DRAWER
+   ======================================== */
+
+.nav-mobile {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    z-index: var(--z-modal);
+    background: var(--bg-surface);
+    border-left: 1px solid var(--border-primary);
+    padding: calc(66px + var(--space-4)) var(--space-4) var(--space-4);
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
+    display: none;
+}
+
+.nav-mobile.is-open {
+    transform: translateX(0);
+}
+
+@media (max-width: 639px) {
+    .nav-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+    }
+}
+
+.nav-mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-modal) - 1);
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+}
+
+.nav-mobile-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.nav-mobile-link {
+    display: block;
+    padding: var(--space-3) var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    color: var(--text-body);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.nav-mobile-link:hover {
+    color: var(--text-primary);
+    background: var(--bg-interactive-hover);
+}
+
+.nav-mobile-divider {
+    height: 1px;
+    background: var(--border-primary);
+    margin: var(--space-2) 0;
+}
+
+/* Category color indicators in mobile nav */
+.nav-mobile-cat {
+    border-left: 3px solid var(--border-secondary);
+}
+
+.nav-mobile-cat.cat-crime        { border-left-color: var(--badge-crime); }
+.nav-mobile-cat.cat-accident     { border-left-color: var(--badge-accident); }
+.nav-mobile-cat.cat-fire         { border-left-color: var(--badge-fire); }
+.nav-mobile-cat.cat-missing-person { border-left-color: var(--badge-missing-person); }
+.nav-mobile-cat.cat-traffic      { border-left-color: var(--badge-traffic); }
+.nav-mobile-cat.cat-weather      { border-left-color: var(--badge-weather); }
+.nav-mobile-cat.cat-community    { border-left-color: var(--badge-community); }
+.nav-mobile-cat.cat-general      { border-left-color: var(--badge-general); }

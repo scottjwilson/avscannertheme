@@ -3,7 +3,14 @@
     "allow": [
       "mcp__acp__Edit",
       "mcp__acp__Write",
-      "mcp__acp__Bash"
+      "mcp__acp__Bash",
+      "Bash(wp post list:*)",
+      "Bash(wp rewrite flush:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(wp option update:*)"
     ]
   }
 }

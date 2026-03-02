@@ -74,6 +74,12 @@
                 <span class="icon-moon"><?php echo avs_icon('moon', 20); ?></span>
             </button>
 
+            <!-- Mobile Menu Toggle -->
+            <button class="menu-toggle" aria-label="<?php esc_attr_e('Open menu', 'avscannertheme'); ?>" aria-expanded="false" aria-controls="nav-mobile">
+                <span class="menu-toggle-open"><?php echo avs_icon('menu', 24); ?></span>
+                <span class="menu-toggle-close"><?php echo avs_icon('close', 24); ?></span>
+            </button>
+
         </div>
     </div>
 </header>
@@ -112,6 +118,27 @@ if (!is_wp_error($nav_categories)) {
     });
 }
 ?>
+
+<!-- Mobile Navigation Drawer -->
+<div class="nav-mobile-backdrop" hidden></div>
+<nav id="nav-mobile" class="nav-mobile" aria-label="<?php esc_attr_e('Mobile navigation', 'avscannertheme'); ?>" aria-hidden="true">
+    <a href="<?php echo esc_url(home_url('/')); ?>" class="nav-mobile-link">
+        <?php esc_html_e('Home', 'avscannertheme'); ?>
+    </a>
+    <a href="<?php echo esc_url(home_url('/codes/')); ?>" class="nav-mobile-link">
+        <?php esc_html_e('Codes', 'avscannertheme'); ?>
+    </a>
+    <?php if (!is_wp_error($nav_categories) && !empty($nav_categories)): ?>
+        <div class="nav-mobile-divider"></div>
+        <?php foreach ($nav_categories as $cat): ?>
+            <a href="<?php echo esc_url(get_term_link($cat)); ?>"
+               class="nav-mobile-link nav-mobile-cat cat-<?php echo esc_attr($cat->slug); ?>">
+                <?php echo esc_html($cat->name); ?>
+            </a>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</nav>
+
 <?php if (!is_wp_error($nav_categories) && !empty($nav_categories)):
     $all_url    = home_url('/');
     $all_active = is_front_page() || (is_post_type_archive('fb_post') && !is_tax());

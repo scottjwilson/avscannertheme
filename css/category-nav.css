@@ -15,7 +15,7 @@
     z-index: calc(var(--z-fixed) - 1);
     background: var(--bg-surface);
     border-bottom: 1px solid var(--border-primary);
-    transition: all var(--transition-base);
+    transition: all var(--transition-base), transform var(--transition-base);
 }
 
 .category-nav.is-scrolled {
@@ -110,6 +110,11 @@
    ======================================== */
 
 @media (max-width: 639px) {
+    .category-nav.is-hidden {
+        transform: translateY(-100%);
+        pointer-events: none;
+    }
+
     .category-nav-scroll {
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -127,5 +132,9 @@
     .cat-link {
         scroll-snap-align: start;
         padding: var(--space-2) var(--space-3);
+    }
+
+    .cat-count {
+        display: none;
     }
 }

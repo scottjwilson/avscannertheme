@@ -31,14 +31,27 @@ import "../css/front-page.css";
   const header = document.querySelector(".site-header");
   const categoryNav = document.querySelector(".category-nav");
 
+  let lastScrollY = window.scrollY;
+
   function handleHeaderScroll() {
-    if (window.scrollY > 50) {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > 50) {
       header?.classList.add("is-scrolled");
       categoryNav?.classList.add("is-scrolled");
     } else {
       header?.classList.remove("is-scrolled");
       categoryNav?.classList.remove("is-scrolled");
     }
+
+    // Hide category bar on scroll down, show on scroll up (mobile only via CSS)
+    if (currentScrollY > 100 && currentScrollY > lastScrollY) {
+      categoryNav?.classList.add("is-hidden");
+    } else if (currentScrollY < lastScrollY) {
+      categoryNav?.classList.remove("is-hidden");
+    }
+
+    lastScrollY = currentScrollY;
   }
 
   // ========================================
@@ -46,6 +59,7 @@ import "../css/front-page.css";
   // ========================================
   const menuToggle = document.querySelector(".menu-toggle");
   const mobileNav = document.querySelector(".nav-mobile");
+  const mobileBackdrop = document.querySelector(".nav-mobile-backdrop");
 
   function toggleMobileMenu() {
     const isOpen = menuToggle?.getAttribute("aria-expanded") === "true";
@@ -53,6 +67,8 @@ import "../css/front-page.css";
     menuToggle?.setAttribute("aria-expanded", !isOpen);
     mobileNav?.classList.toggle("is-open");
     mobileNav?.setAttribute("aria-hidden", isOpen);
+    mobileBackdrop?.classList.toggle("is-open");
+    if (mobileBackdrop) mobileBackdrop.hidden = isOpen;
     document.body.classList.toggle("menu-open");
   }
 
@@ -60,6 +76,8 @@ import "../css/front-page.css";
     menuToggle?.setAttribute("aria-expanded", "false");
     mobileNav?.classList.remove("is-open");
     mobileNav?.setAttribute("aria-hidden", "true");
+    mobileBackdrop?.classList.remove("is-open");
+    if (mobileBackdrop) mobileBackdrop.hidden = true;
     document.body.classList.remove("menu-open");
   }
 
@@ -882,8 +900,9 @@ import "../css/front-page.css";
   function init() {
     window.addEventListener("scroll", handleHeaderScroll, { passive: true });
     menuToggle?.addEventListener("click", toggleMobileMenu);
+    mobileBackdrop?.addEventListener("click", closeMobileMenu);
 
-    mobileNav?.querySelectorAll(".nav-link").forEach((link) => {
+    mobileNav?.querySelectorAll(".nav-mobile-link").forEach((link) => {
       link.addEventListener("click", closeMobileMenu);
     });
 
